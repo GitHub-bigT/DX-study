@@ -47,8 +47,8 @@ void createWindow(HINSTANCE hInstance, int nCmdShow)
 		WindowInfo wi;
 		if (i == 0)
 		{
-			wi.v4.x = 100;
-			wi.v4.y = 100;
+			wi.v4.x = 800;
+			wi.v4.y = 400;
 		}
 		if (i == 1)
 		{

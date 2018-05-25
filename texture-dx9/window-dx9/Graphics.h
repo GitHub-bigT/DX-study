@@ -1,10 +1,11 @@
 #pragma once
 #include <QThread>
 #include <d3d9.h>
+#include <d3dx9.h>
 //#include <winerror.h>
 #include "nvapi.h"
 
-#define CUSTOMFVF D3DFVF_XYZRHW | D3DFVF_DIFFUSE
+#define CUSTOMFVF D3DFVF_XYZRHW | D3DFVF_TEX1
 
 struct Vec4
 {
@@ -25,7 +26,7 @@ struct WindowInfo
 struct CUSTOMVERTEX
 {
 	FLOAT x, y, z, rhw;
-	DWORD color;
+	FLOAT u, v;
 };
 
 class Graphics : public QThread
@@ -45,6 +46,7 @@ private:
 	LPDIRECT3D9 d3d9;
 	LPDIRECT3DDEVICE9 d3d9_deivice;
 	LPDIRECT3DVERTEXBUFFER9 v_buffer;
+	LPDIRECT3DTEXTURE9 tex;
 	void initD3D();
 	void initGraphics();
 	void render();

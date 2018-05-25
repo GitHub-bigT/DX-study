@@ -55,38 +55,28 @@ void Graphics::joinSwapGroup()
 void Graphics::initGraphics()
 {
 	HRESULT hr;
-	CUSTOMVERTEX vertices[] = { {0.0f, 300.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(0, 0, 255)},
-								{400.0f, 600.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(0, 255, 0)},
-								{0.0f, 600.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(255, 0, 0)},
-								{0.0f, 300.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(0, 0, 255)},
-								{400.0f, 300.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(0, 255, 0)},
-								{400.0f, 600.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(255, 0, 0)},
-							};//ÄæÊ±ÕëÌÞ³ý
+	CUSTOMVERTEX vertices[] = { {0.0f, 300.0f, 1.0f, 1.0f, 0, 0},
+								{400.0f, 600.0f, 1.0f, 1.0f, 1, 1},
+								{0.0f, 600.0f, 1.0f, 1.0f, 0, 1},
+								{0.0f, 300.0f, 1.0f, 1.0f, 0, 0},
+								{400.0f, 300.0f, 1.0f, 1.0f, 1, 0},
+								{400.0f, 600.0f, 1.0f, 1.0f, 1, 1},
+								};//ÄæÊ±ÕëÌÞ³ý
 	hr = d3d9_deivice->CreateVertexBuffer(sizeof(vertices), 0, CUSTOMFVF, D3DPOOL_MANAGED, &v_buffer, NULL);
 	VOID *pVoid;
 	v_buffer->Lock(0, 0, (void**)&pVoid, 0);
 	memcpy(pVoid, vertices, sizeof(vertices));//glbufferdata
 	v_buffer->Unlock();
-/*
-	CUSTOMVERTEX vertices[] =
+	//DirectTexture
+	//hr = D3DXCreateTextureFromFile(d3d9_deivice, L"container.png", &tex);
+	hr = D3DXCreateTextureFromFile(d3d9_deivice, L"test.jpg", &tex);
+	if (hr == S_OK)
 	{
-		{0.0f, 0.0f, 1.0f},
-		{1.0f, 1.0f, 1.0f},
-		{0.0f, 1.0f, 1.0f},
-	};
-	printf("vertices sizeof = %d\n", sizeof(vertices));
-	printf("3 * sizeof(CUSTOMVERTEX)= %d\n", 3 * sizeof(CUSTOMVERTEX));
-	d3d9_deivice->CreateVertexBuffer(3 * sizeof(CUSTOMVERTEX),
-		0,
-		CUSTOMFVF,
-		D3DPOOL_MANAGED,
-		&v_buffer,
-		NULL);
-
-	VOID *pVoid;
-	v_buffer->Lock(0, 0, (void**)&pVoid, 0);
-	memcpy(pVoid, vertices, sizeof(vertices));
-	v_buffer->Unlock();*/
+		printf("load image success \n");
+	}
+	d3d9_deivice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	d3d9_deivice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	d3d9_deivice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
 }
 
 void Graphics::initD3D()
@@ -138,18 +128,20 @@ void Graphics::render()
 	timer_start(&render_timer);
 
 	//color = color ? 0 : 255;
-	d3d9_deivice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 0, 0), 1.0f, 0);
+	d3d9_deivice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 	//d3d9_deivice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(color, color, color), 1.0f, 0);
 	d3d9_deivice->BeginScene();
 	//render
+	d3d9_deivice->SetTexture(0, tex);
 	d3d9_deivice->SetFVF(CUSTOMFVF);
 	d3d9_deivice->SetStreamSource(0, v_buffer, 0, sizeof(CUSTOMVERTEX));
 	d3d9_deivice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 2);
+
 	d3d9_deivice->EndScene();
 	d3d9_deivice->Present(NULL, NULL, NULL, NULL);
 
 	int render_time = timer_elapsed_msec(&render_timer);
-	printf("render time = %d\n", render_time);
+	//printf("render time = %d\n", render_time);
 }
 
 void Graphics::clean3D()
