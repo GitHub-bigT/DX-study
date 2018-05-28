@@ -68,9 +68,9 @@ void Graphics::initGraphics()
 	memcpy(pVoid, vertices, sizeof(vertices));//glbufferdata
 	v_buffer->Unlock();
 	//DirectTexture
-	//hr = D3DXCreateTextureFromFile(d3d9_deivice, L"container.png", &tex);
-	hr = D3DXCreateTextureFromFile(d3d9_deivice, L"white.png", &tex1);
-	hr = D3DXCreateTextureFromFile(d3d9_deivice, L"black.png", &tex2);
+	hr = D3DXCreateTextureFromFile(d3d9_deivice, L"container.png", &tex1);
+	//hr = D3DXCreateTextureFromFile(d3d9_deivice, L"white.png", &tex1);
+	//hr = D3DXCreateTextureFromFile(d3d9_deivice, L"black.png", &tex2);
 	d3d9_deivice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 	d3d9_deivice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	d3d9_deivice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
@@ -122,9 +122,10 @@ void Graphics::initD3D()
 	{
 		printf("adapter ordinal = %d\n", d3dcp.AdapterOrdinal);
 	}
-	/*
-	joinSwapGroup();*/
+	//joinSwapGroup();
 }
+
+void initGL();
 
 void Graphics::render()
 {
@@ -136,10 +137,7 @@ void Graphics::render()
 	//d3d9_deivice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(color, color, color), 1.0f, 0);
 	d3d9_deivice->BeginScene();
 	//render
-	if (color == 0)
-		d3d9_deivice->SetTexture(0, tex1);
-	else
-		d3d9_deivice->SetTexture(0, tex2);
+	d3d9_deivice->SetTexture(0, tex1);
 	d3d9_deivice->SetFVF(CUSTOMFVF);
 	d3d9_deivice->SetStreamSource(0, v_buffer, 0, sizeof(CUSTOMVERTEX));
 	d3d9_deivice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 2);

@@ -1,9 +1,11 @@
 #pragma once
+#define GLEW_STATIC
 #include <QThread>
 #include <d3d9.h>
 #include <d3dx9.h>
 //#include <winerror.h>
 #include "nvapi.h"
+#include <glew.h>
 
 #define CUSTOMFVF D3DFVF_XYZRHW | D3DFVF_TEX1
 
@@ -54,6 +56,8 @@ private:
 	void clean3D();
 	void run();
 	void joinSwapGroup();
+	//gl
+	void initGL();
 	void timer_start(FILETIME *start);
 	int64_t timer_elapsed_msec(FILETIME *start);
 	int64_t timer_elapsed_usec(FILETIME *start);
