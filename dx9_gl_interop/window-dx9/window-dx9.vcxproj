@@ -101,13 +101,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\QtCore;../../dxsdk/Include;../../3rd/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\QtCore;../../dxsdk/Include;../../3rd/glew/include;../../3rd/stb_image/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;../../dxsdk/Lib/x64;../../3rd/glew/lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Qt5Cored.lib;nvapi64.lib;d3dx9.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Cored.lib;nvapi64.lib;d3dx9.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>editbin /subsystem:console $(OutDir)$(ProjectName).exe</Command>

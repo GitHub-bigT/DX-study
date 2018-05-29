@@ -4,3 +4,5 @@
 *.db
 Debug
 .vs
+rgb_yuv420.exe
+rgb2yuv.bat

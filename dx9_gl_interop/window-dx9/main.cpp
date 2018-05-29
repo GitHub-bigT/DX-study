@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include "Graphics.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 #pragma comment (lib, "d3d9.lib")
 
