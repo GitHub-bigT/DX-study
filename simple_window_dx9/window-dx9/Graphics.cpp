@@ -56,6 +56,7 @@ void Graphics::render()
 	d3d9_deivice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(color, color, color), 1.0f, 0);
 	d3d9_deivice->BeginScene();
 	d3d9_deivice->EndScene();
+	Sleep(30);
 	d3d9_deivice->Present(NULL, NULL, NULL, NULL);
 }
 
