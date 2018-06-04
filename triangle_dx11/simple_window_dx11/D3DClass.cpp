@@ -124,7 +124,7 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.OutputWindow = hwnd;
-	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Count = 4;
 	swapChainDesc.SampleDesc.Quality = 0;
 	if (fullscreen)
 	{
@@ -224,6 +224,12 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	fieldOfView = 3.141592654f / 4.0f;
 	screenAspect = (float)screenWidth / (float)screenHeight;
 	//m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
+
+	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
+
+	m_worldMatrix = XMMatrixIdentity();
+
+	m_orthoMatrix = XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 
 	return true;
 }
