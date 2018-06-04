@@ -124,7 +124,7 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.OutputWindow = hwnd;
-	swapChainDesc.SampleDesc.Count = 4;
+	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
 	if (fullscreen)
 	{
