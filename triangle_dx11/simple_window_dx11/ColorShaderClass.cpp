@@ -69,7 +69,6 @@ bool ColorShaderClass::initShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 		}
 		return false;
 	}
-
 	hr = D3DCompileFromFile(psFilename, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMsg);
 	if (FAILED(hr))
 	{
@@ -89,6 +88,7 @@ bool ColorShaderClass::initShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 	hr = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
 	if (FAILED(hr))
 		return false;
+
 	polygonLayout[0].SemanticName = "POSITION";
 	polygonLayout[0].SemanticIndex = 0;
 	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -106,6 +106,7 @@ bool ColorShaderClass::initShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 	polygonLayout[1].InstanceDataStepRate = 0;
 
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
+
 	hr = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_layout);
 	if (FAILED(hr))
 		return false;
@@ -213,4 +214,5 @@ void ColorShaderClass::renderShader(ID3D11DeviceContext* deviceContext, int inde
 
 	// Render the triangle.
 	deviceContext->DrawIndexed(indexCount, 0, 0);
+	//deviceContext->Draw(3, 0);
 }

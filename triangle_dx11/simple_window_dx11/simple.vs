@@ -13,7 +13,7 @@ struct VertexInputType
 
 struct PixelInputType
 {
-    float4 position : SV_POSITION;
+    float4 position : SV_POSITION;// system value
     float4 color : COLOR;
 };
 
@@ -30,6 +30,7 @@ PixelInputType ColorVertexShader(VertexInputType input)
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
     
+	//output.position = input.position;
     // Store the input color for the pixel shader to use.
     output.color = input.color;
     

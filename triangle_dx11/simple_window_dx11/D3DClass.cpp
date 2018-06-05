@@ -89,7 +89,7 @@ void D3DClass::printInfo(int screenWidth, int screenHeight)
 
 bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear)
 {
-	printInfo(screenWidth, screenHeight);
+	//printInfo(screenWidth, screenHeight);
 
 	HRESULT hr;
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
@@ -143,6 +143,9 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	hr = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferPtr);
 	if (FAILED(hr))
 		return false;
+	UINT x4MsaaQuality = 0;
+	m_device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 1, &x4MsaaQuality);
+	printf("x4MsaaQuality = %d\n", x4MsaaQuality);
 	hr = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
 	if (FAILED(hr))
 		return false;
@@ -221,7 +224,7 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	m_deviceContext->RSSetViewports(1, &viewport);
 
 	//
-	fieldOfView = 3.141592654f / 4.0f;
+	fieldOfView = 3.141592654f / 8.0f;
 	screenAspect = (float)screenWidth / (float)screenHeight;
 	//m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
 
@@ -229,7 +232,7 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 
 	m_worldMatrix = XMMatrixIdentity();
 
-	m_orthoMatrix = XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
+	m_orthoMatrix = XMMatrixOrthographicOffCenterLH(-1.0f, 1.0f, -1.0f, 1.0f, screenNear, screenDepth);
 
 	return true;
 }

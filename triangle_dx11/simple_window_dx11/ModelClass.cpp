@@ -43,7 +43,7 @@ bool ModelClass::initBuffer(ID3D11Device* device)
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
-	m_vertexCount = 3;
+	m_vertexCount = 5;
 	m_indexCount = 3;
 
 	vertices = new VertexType[m_vertexCount];
@@ -58,18 +58,31 @@ bool ModelClass::initBuffer(ID3D11Device* device)
 		return false;
 	}
 
-	vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
-	vertices[0].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 10.0f);  //左下
+	vertices[0].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 
-	vertices[1].position = XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
+	vertices[1].position = XMFLOAT3(-1.0f, 1.0f, 10.0f);  //左上
 	vertices[1].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 
-	vertices[2].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-	vertices[2].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[2].position = XMFLOAT3(1.0f, 1.0f, 10.0f);  //右上
+	vertices[2].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 
-	indices[0] = 0;  // Bottom left.
-	indices[1] = 1;  // Top middle.
-	indices[2] = 2;  // Bottom right.
+	vertices[3].position = XMFLOAT3(1.0f, -1.0f, 10.0f);  //右下
+	vertices[3].color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+
+	vertices[4].position = XMFLOAT3(0.0f, 1.0f, 10.0f);  //中上
+	vertices[4].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+
+/*
+	indices[0] = 0;  // 左下
+	indices[1] = 1;  // 左上
+	indices[2] = 3;  // 右下
+	indices[3] = 1;  // 左上
+	indices[4] = 2;  // 右上
+	indices[5] = 3;  // 右下*/
+	indices[0] = 0;  // 左下
+	indices[1] = 4;  // 中上
+	indices[2] = 3;  // 右下
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;

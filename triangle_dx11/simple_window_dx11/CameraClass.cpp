@@ -77,7 +77,7 @@ void CameraClass::render()
 	// Setup where the camera is looking by default.
 	lookAt.x = 0.0f;
 	lookAt.y = 0.0f;
-	lookAt.z = 1.0f;
+	lookAt.z = 0.1f;
 
 	// Load it into a XMVECTOR structure.
 	lookAtVector = XMLoadFloat3(&lookAt);

@@ -109,6 +109,7 @@ bool GraphicsClass::render()
 	m_direct3D->getWorldMatrix(worldMatrix);
 	m_camera->getViewMatrix(viewMatrix);
 	m_direct3D->getProjectionMatrix(projectionMatrix);
+	//m_direct3D->getOrthoMatrix(projectionMatrix);
 
 	m_model->render(m_direct3D->getDeviceContext());
 
