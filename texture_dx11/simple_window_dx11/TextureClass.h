@@ -25,9 +25,10 @@ public:
 
 private:
 	bool loadTar(char*, int&, int&);
-	bool loadImage(char*, int&, int&, int&);
+	bool loadImage(char*);
 
 private:
+	int m_width, m_height, m_channels;
 	unsigned char* m_targaData;
 	ID3D11Texture2D *m_texture;
 	ID3D11ShaderResourceView *m_textureView;

@@ -106,6 +106,16 @@ bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFi
 	pixelShaderBuffer->Release();
 	pixelShaderBuffer = 0;
 
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+	hr = device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+	if (FAILED(hr))
+		return false;
+
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -167,8 +177,39 @@ void TextureShaderClass::stopShader()
 	}
 }
 
-bool TextureShaderClass::render(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture)
+bool TextureShaderClass::setShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
 {
+	HRESULT hr;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	MatrixBufferType *dataPtr;
+	unsigned int bufferNumber;
+	worldMatrix = XMMatrixTranspose(worldMatrix);
+	viewMatrix = XMMatrixTranspose(viewMatrix);
+	projectionMatrix = XMMatrixTranspose(projectionMatrix);
+	hr = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(hr))
+		return false;
+	dataPtr = (MatrixBufferType*)mappedResource.pData;
+	dataPtr->world = worldMatrix;
+	dataPtr->view = viewMatrix;
+	dataPtr->projection = projectionMatrix;
+	deviceContext->Unmap(m_matrixBuffer, 0);
+
+	bufferNumber = 0;
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
+	return true;
+}
+
+bool TextureShaderClass::render(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
+{
+	bool result;
+	result = setShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
 	renderShader(deviceContext, indexCount, texture);
 
 	return true;

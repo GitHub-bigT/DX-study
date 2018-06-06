@@ -5,6 +5,9 @@ TextureClass::TextureClass()
 	m_targaData = 0;
 	m_texture = 0;
 	m_textureView = 0;
+	m_width = 0;
+	m_height = 0;
+	m_channels = 0;
 }
 
 TextureClass::~TextureClass()
@@ -14,24 +17,28 @@ TextureClass::~TextureClass()
 bool TextureClass::init(ID3D11Device *device, ID3D11DeviceContext *deviceContext, char *filename)
 {
 	bool result;
-	int height, width, channels;
 	D3D11_TEXTURE2D_DESC textureDesc;
 	HRESULT hr;
 	unsigned int rowPitch;
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 
 	//result = loadTar(filename, width, height);
-	result = loadImage(filename, width, height, channels);
+	result = loadImage(filename);
 	if (!result)
 	{
 		return false;
 	}
 
-	textureDesc.Height = height;
-	textureDesc.Width = width;
+	textureDesc.Height = m_height;
+	textureDesc.Width = m_width;
 	textureDesc.MipLevels = 0;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	if (m_channels == 3)
+	{
+		//textureDesc.Format = D2D1_PIXEL_FORMAT;
+	}
+	else if (m_channels == 4)
+		textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.SampleDesc.Quality = 0;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -44,7 +51,7 @@ bool TextureClass::init(ID3D11Device *device, ID3D11DeviceContext *deviceContext
 		return false;
 	}
 
-	rowPitch = width * (4 * sizeof(unsigned char));
+	rowPitch = m_width * (4 * sizeof(unsigned char));
 	deviceContext->UpdateSubresource(m_texture, 0, NULL, m_targaData, rowPitch, 0);
 
 	srvDesc.Format = textureDesc.Format;
@@ -90,9 +97,9 @@ ID3D11ShaderResourceView* TextureClass::getTexture()
 	return m_textureView;
 }
 
-bool TextureClass::loadImage(char*filename, int&width, int&height, int&channels)
+bool TextureClass::loadImage(char*filename)
 {
-	m_targaData = stbi_load(filename, &width, &height, &channels, 0);
+	m_targaData = stbi_load(filename, &m_width, &m_height, &m_channels, 0);
 	if (!m_targaData)
 	{
 		return false;

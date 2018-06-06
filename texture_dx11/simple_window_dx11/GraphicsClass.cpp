@@ -29,14 +29,14 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	}
 
 	m_camera = new CameraClass;
-	m_camera->setPosition(0.0f, 0.0f, -10.0f);
+	m_camera->setPosition(0.0f, 0.0f, -80.0f);
 
 	m_model = new ModelClass;
 	if (!m_model)
 	{
 		return false;
 	}
-	result = m_model->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), "container2.png");
+	result = m_model->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), "../../image_source/container2.png");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
@@ -113,7 +113,7 @@ bool GraphicsClass::render()
 
 	m_model->render(m_direct3D->getDeviceContext());
 
-	result = m_textureShader->render(m_direct3D->getDeviceContext(), m_model->getIndexCount(), m_model->getTexture());
+	result = m_textureShader->render(m_direct3D->getDeviceContext(), m_model->getIndexCount(), m_model->getTexture(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)
 	{
 		return false;
