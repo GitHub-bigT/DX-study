@@ -29,14 +29,14 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	}
 
 	m_camera = new CameraClass;
-	m_camera->setPosition(0.0f, 0.0f, -80.0f);
+	m_camera->setPosition(0.0f, 0.0f, -5.0f);
 
 	m_model = new ModelClass;
 	if (!m_model)
 	{
 		return false;
 	}
-	result = m_model->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), "../../image_source/container2.png");
+	result = m_model->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), "../../image_source/stone01.tga");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
@@ -103,7 +103,7 @@ bool GraphicsClass::render()
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
-	m_direct3D->beginScene(0.5f, 0.5f, 0.5f, 0.5f);
+	m_direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 	m_camera->render();
 
 	m_direct3D->getWorldMatrix(worldMatrix);
