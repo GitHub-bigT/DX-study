@@ -3,8 +3,7 @@
 GraphicsClass::GraphicsClass()
 {
 	m_direct3D = 0;
-	//m_colorShader = 0;
-	m_model = 0;
+	m_bitmap = 0;
 	m_camera = 0;
 }
 
@@ -31,12 +30,12 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	m_camera = new CameraClass;
 	m_camera->setPosition(0.0f, 0.0f, -10.0f);
 
-	m_model = new ModelClass;
-	if (!m_model)
+	m_bitmap = new ModelClass;
+	if (!m_bitmap)
 	{
 		return false;
 	}
-	result = m_model->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), "../../image_source/stone01.tga");
+	result = m_bitmap->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), screenWidth, screenHeight, "../../image_source/wood.png", 256, 256);
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
@@ -67,11 +66,11 @@ void GraphicsClass::stop()
 		m_direct3D = 0;
 	}
 
-	if (m_model)
+	if (m_bitmap)
 	{
-		m_model->stop();
-		delete m_model;
-		m_model = 0;
+		m_bitmap->stop();
+		delete m_bitmap;
+		m_bitmap = 0;
 	}
 
 	if (m_camera)
@@ -99,25 +98,34 @@ bool GraphicsClass::frame()
 	return true;
 }
 
+float offset = 0;
+float speed = 0.5f;
 bool GraphicsClass::render()
 {
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 	bool result;
-	m_direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	m_direct3D->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
 	m_camera->render();
 
 	m_direct3D->getWorldMatrix(worldMatrix);
 	m_camera->getViewMatrix(viewMatrix);
 	m_direct3D->getProjectionMatrix(projectionMatrix);
-	//m_direct3D->getOrthoMatrix(projectionMatrix);
+	m_direct3D->getOrthoMatrix(orthoMatrix);
 
-	m_model->render(m_direct3D->getDeviceContext());
-
-	result = m_textureShader->render(m_direct3D->getDeviceContext(), m_model->getIndexCount(), m_model->getTexture(), worldMatrix, viewMatrix, projectionMatrix);
+	////....start render 2d
+	m_direct3D->turnZBufferOff();
+	if (offset > 800.0f - 256.0f || offset < 0)
+		speed = -speed;
+	offset += speed;
+	m_bitmap->render(m_direct3D->getDeviceContext(), offset, 100);
+	result = m_textureShader->render(m_direct3D->getDeviceContext(), m_bitmap->getIndexCount(), m_bitmap->getTexture(), worldMatrix, viewMatrix, orthoMatrix);
 	if (!result)
 	{
 		return false;
 	}
+
+	m_direct3D->turnZBufferOn();
+	//....start render 3d
 
 	m_direct3D->endScene();
 	return true;

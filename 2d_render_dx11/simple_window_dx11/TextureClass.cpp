@@ -21,9 +21,16 @@ bool TextureClass::init(ID3D11Device *device, ID3D11DeviceContext *deviceContext
 	HRESULT hr;
 	unsigned int rowPitch;
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	wchar_t  w_filename[100];
+	swprintf(w_filename, 100, L"%hs", filename);
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/ff476315(v=vs.85).aspx
+	hr = D3DX11CreateShaderResourceViewFromFile(device, w_filename, NULL, NULL, &m_textureView, NULL);
+	if (FAILED(hr))
+	{
+		return false;
+	}
 
-	//result = loadTar(filename, width, height);
-	result = loadImage(filename);
+	/*result = loadImage(filename);
 	if (!result)
 	{
 		return false;
@@ -66,7 +73,7 @@ bool TextureClass::init(ID3D11Device *device, ID3D11DeviceContext *deviceContext
 	}
 	deviceContext->GenerateMips(m_textureView);
 	delete[] m_targaData;
-	m_targaData = 0;
+	m_targaData = 0;*/
 
 	return true;
 }

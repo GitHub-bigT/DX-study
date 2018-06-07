@@ -1,7 +1,7 @@
 #pragma once
 #include "D3DClass.h"
 #include "TextureShaderClass.h"
-#include "ModelClass.h"
+#include "BitmapClass.h"
 #include "CameraClass.h"
 
 const bool FULL_SCREEN = false;
@@ -24,6 +24,6 @@ private:
 private:
 	D3DClass *m_direct3D;
 	TextureShaderClass *m_textureShader;
-	ModelClass *m_model;
+	ModelClass *m_bitmap;
 	CameraClass *m_camera;
 };

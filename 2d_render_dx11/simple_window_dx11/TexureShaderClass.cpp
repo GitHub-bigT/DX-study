@@ -37,7 +37,7 @@ bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFi
 	vertexShaderBuffer = 0;
 	pixelShaderBuffer = 0;
 
-	hr = D3DCompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMsg);
+	hr = D3DX11CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &vertexShaderBuffer, &errorMsg, NULL);
 	if (FAILED(hr))
 	{
 		if (errorMsg)
@@ -51,7 +51,7 @@ bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFi
 		return false;
 	}
 
-	hr = D3DCompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMsg);
+	hr = D3DX11CompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pixelShaderBuffer, &errorMsg, NULL);
 	if (FAILED(hr))
 	{
 		if (errorMsg)
