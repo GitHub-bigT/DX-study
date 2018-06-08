@@ -1,6 +1,6 @@
 #pragma once
 #include "FontClass.h"
-#include "TextureShaderClass.h"
+#include "FontShaderClass.h"
 
 class TextClass
 {
@@ -20,23 +20,21 @@ private:
 public:
 	TextClass();
 	~TextClass();
-	bool init(ID3D11Device*, ID3D11DeviceContext*, HWND, int, int, XMMATRIX);
+	bool init(ID3D11Device*, ID3D11DeviceContext*, HWND, char*, int, int, int, int, float, float, float);
 	void stop();
-	bool render(ID3D11DeviceContext*, XMMATRIX, XMMATRIX);
+	bool render(ID3D11DeviceContext*, XMMATRIX);
 
 private:
-	bool initSentence(SentenceType**, int, ID3D11Device*);
-	bool updateSentence(SentenceType*, char*, int, int, float, float, float, ID3D11DeviceContext*);
-	void releaseSentence(SentenceType**);
-	bool renderSentence(ID3D11DeviceContext*, SentenceType*, XMMATRIX, XMMATRIX);
+	bool initSentence(int, ID3D11Device*);
+	bool updateSentence(char*, int, int, float, float, float, ID3D11DeviceContext*);
+	void releaseSentence();
+	bool renderSentence(ID3D11DeviceContext*, XMMATRIX);
 
 private:
 	FontClass *m_fontClass;
-	TextureShaderClass *m_fontShaderClass;
+	FontShaderClass *m_fontShaderClass;
 	int m_screenWidth, m_screenHeight;
-	XMMATRIX m_baseViewMatrix;
 
-	SentenceType* m_sentence1;
-	SentenceType* m_sentence2;
+	SentenceType* m_sentence;
 };
 

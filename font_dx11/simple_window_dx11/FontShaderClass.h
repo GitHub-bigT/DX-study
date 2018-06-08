@@ -6,15 +6,13 @@
 
 using namespace DirectX;
 
-class TextureShaderClass
+class FontShaderClass
 {
 
 private:
 	struct MatrixBufferType
 	{
-		XMMATRIX world;
-		XMMATRIX view;
-		XMMATRIX projection;
+		XMMATRIX ortho;
 	};
 
 	struct PixelBufferType
@@ -23,18 +21,18 @@ private:
 	};
 
 public:
-	TextureShaderClass();
-	~TextureShaderClass();
+	FontShaderClass();
+	~FontShaderClass();
 	bool init(ID3D11Device*, HWND);
 	void stop();
-	bool render(ID3D11DeviceContext*, int, ID3D11ShaderResourceView*, XMMATRIX, XMMATRIX, XMMATRIX, XMFLOAT4);
+	bool render(ID3D11DeviceContext*, int, ID3D11ShaderResourceView*, XMMATRIX, XMFLOAT4);
 
 private:
 	bool initShader(ID3D11Device*, HWND, WCHAR*, WCHAR*);
 	void stopShader();
 	void renderShader(ID3D11DeviceContext*, int, ID3D11ShaderResourceView*);
 	void outputShaderErrorMsg(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename);
-	bool setShaderParameters(ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, XMFLOAT4);
+	bool setShaderParameters(ID3D11DeviceContext*, XMMATRIX, XMFLOAT4);
 private:
 	ID3D11VertexShader *m_vertexShader;
 	ID3D11PixelShader *m_pixelShader;

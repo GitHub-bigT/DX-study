@@ -4,7 +4,7 @@ GraphicsClass::GraphicsClass()
 {
 	m_direct3D = 0;
 	m_textClass = 0;
-	m_camera = 0;
+	m_textClass2 = 0;
 }
 
 GraphicsClass::~GraphicsClass()
@@ -14,7 +14,6 @@ GraphicsClass::~GraphicsClass()
 bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 {
 	bool result;
-	XMMATRIX baseViewMatrix;
 
 	m_direct3D = new D3DClass;
 	if (!m_direct3D)
@@ -28,17 +27,24 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 
-	m_camera = new CameraClass;
-	m_camera->setPosition(0.0f, 0.0f, -1.0f);
-	m_camera->render();
-	m_camera->getViewMatrix(baseViewMatrix);
-
 	m_textClass = new TextClass;
 	if (!m_textClass)
 	{
 		return false;
 	}
-	result = m_textClass->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), hWnd, screenWidth, screenHeight, baseViewMatrix);
+	result = m_textClass->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), hWnd, "OpenGL", screenWidth, screenHeight, 0, 200, 1.0f, 1.0f, 0.0f);
+	if (!result)
+	{
+		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
+		return false;
+	}
+
+	m_textClass2 = new TextClass;
+	if (!m_textClass2)
+	{
+		return false;
+	}
+	result = m_textClass2->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), hWnd, "this is a new sentence.", screenWidth, screenHeight, 0, 100, 1.0f, 1.0f, 1.0f);
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
@@ -64,10 +70,11 @@ void GraphicsClass::stop()
 		m_textClass = 0;
 	}
 
-	if (m_camera)
+	if (m_textClass2)
 	{
-		delete m_camera;
-		m_camera = 0;
+		m_textClass2->stop();
+		delete m_textClass2;
+		m_textClass2 = 0;
 	}
 }
 
@@ -86,11 +93,8 @@ bool GraphicsClass::render()
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 	bool result;
-	m_direct3D->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
-	m_camera->render();
+	m_direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
-	m_direct3D->getWorldMatrix(worldMatrix);
-	m_camera->getViewMatrix(viewMatrix);
 	m_direct3D->getProjectionMatrix(projectionMatrix);
 	m_direct3D->getOrthoMatrix(orthoMatrix);
 
@@ -98,7 +102,13 @@ bool GraphicsClass::render()
 	m_direct3D->turnZBufferOff();
 	m_direct3D->turnOnAlphaBlending();
 
-	result = m_textClass->render(m_direct3D->getDeviceContext(), worldMatrix, orthoMatrix);
+	result = m_textClass->render(m_direct3D->getDeviceContext(), orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = m_textClass2->render(m_direct3D->getDeviceContext(), orthoMatrix);
 	if (!result)
 	{
 		return false;

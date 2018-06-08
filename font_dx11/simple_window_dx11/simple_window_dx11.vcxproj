@@ -159,11 +159,10 @@
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="BitmapClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
     <ClCompile Include="TextClass.cpp" />
     <ClCompile Include="TextureClass.cpp" />
-    <ClCompile Include="TexureShaderClass.cpp" />
+    <ClCompile Include="FontShaderClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h" />
@@ -171,17 +170,14 @@
     <ClInclude Include="FontClass.h" />
     <ClInclude Include="GraphicsClass.h" />
     <ClInclude Include="InputClass.h" />
-    <ClInclude Include="BitmapClass.h" />
     <ClInclude Include="SystemClass.h" />
     <ClInclude Include="TextClass.h" />
     <ClInclude Include="TextureClass.h" />
-    <ClInclude Include="TextureShaderClass.h" />
+    <ClInclude Include="FontShaderClass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="font.ps" />
     <None Include="font.vs" />
-    <None Include="texture.ps" />
-    <None Include="texture.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

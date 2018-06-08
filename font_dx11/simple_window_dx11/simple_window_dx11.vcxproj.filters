@@ -36,19 +36,16 @@
     <ClCompile Include="CameraClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TexureShaderClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TextureClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BitmapClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FontClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FontShaderClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,13 +65,7 @@
     <ClInclude Include="CameraClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextureShaderClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextureClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BitmapClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FontClass.h">
@@ -83,14 +74,11 @@
     <ClInclude Include="TextClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FontShaderClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="texture.vs">
-      <Filter>Source Files\shader</Filter>
-    </None>
-    <None Include="texture.ps">
-      <Filter>Source Files\shader</Filter>
-    </None>
     <None Include="font.vs">
       <Filter>Source Files\shader</Filter>
     </None>

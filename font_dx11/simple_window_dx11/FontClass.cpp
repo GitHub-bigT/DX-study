@@ -82,7 +82,6 @@ void FontClass::buildVertexArray(void *vertices, char *sentence, float drawX, fl
 			vertexPtr[index].tex = XMFLOAT2(m_font[letter].right, 1.0f);
 			index++;
 
-			// Update the x location for drawing by the size of the letter and one pixel.
 			drawX = drawX + m_font[letter].size + 1.0f;
 		}
 	}

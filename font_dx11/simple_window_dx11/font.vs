@@ -1,8 +1,6 @@
 cbuffer MatrixBuffer
 {
-    matrix worldMatrix;
-    matrix viewMatrix;
-    matrix projectionMatrix;
+    matrix orthoMatrix;
 };
 
 struct VertexInputType
@@ -21,10 +19,7 @@ PixelInputType TextureVertexShader(VertexInputType input)
 {
 	input.position.w = 1.0f;
 	PixelInputType output;
-	output.position = mul(input.position, worldMatrix);
-    output.position = mul(output.position, viewMatrix);
-    output.position = mul(output.position, projectionMatrix);
-	//output.position = input.position;
+    output.position = mul(input.position, orthoMatrix);
 	output.tex = input.tex;
 	return output;
 }

@@ -27,6 +27,6 @@ float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 		textureColor.a = 1.0f;
 		textureColor = textureColor * pixelColor;
 	}
-
+	//textureColor = float4(1.0f, 0.0f, 0.0f, 1.0f);
     return textureColor;
 }

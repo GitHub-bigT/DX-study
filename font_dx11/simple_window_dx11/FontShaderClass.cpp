@@ -1,6 +1,6 @@
-#include "TextureShaderClass.h"
+#include "FontShaderClass.h"
 
-TextureShaderClass::TextureShaderClass()
+FontShaderClass::FontShaderClass()
 {
 	m_vertexShader = 0;
 	m_pixelShader = 0;
@@ -10,21 +10,21 @@ TextureShaderClass::TextureShaderClass()
 	m_pixelBuffer = 0;
 }
 
-TextureShaderClass::~TextureShaderClass()
+FontShaderClass::~FontShaderClass()
 {
 }
 
-bool TextureShaderClass::init(ID3D11Device *device, HWND hwnd)
+bool FontShaderClass::init(ID3D11Device *device, HWND hwnd)
 {
 	return initShader(device, hwnd, L"font.vs", L"font.ps");
 }
 
-void TextureShaderClass::stop()
+void FontShaderClass::stop()
 {
 	stopShader();
 }
 
-bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFilename, WCHAR *psFilename)
+bool FontShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFilename, WCHAR *psFilename)
 {
 	HRESULT hr;
 	ID3D10Blob *errorMsg;
@@ -142,7 +142,7 @@ bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFi
 	return true;
 }
 
-void TextureShaderClass::outputShaderErrorMsg(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
+void FontShaderClass::outputShaderErrorMsg(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
 {
 	char* compileErrors;
 	unsigned long long bufferSize, i;
@@ -155,7 +155,7 @@ void TextureShaderClass::outputShaderErrorMsg(ID3D10Blob* errorMessage, HWND hwn
 	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
 }
 
-void TextureShaderClass::stopShader()
+void FontShaderClass::stopShader()
 {
 	if (m_sampleState)
 	{
@@ -194,7 +194,7 @@ void TextureShaderClass::stopShader()
 	}
 }
 
-bool TextureShaderClass::setShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, XMFLOAT4 pixelColor)
+bool FontShaderClass::setShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX orthoMatrix, XMFLOAT4 pixelColor)
 {
 	HRESULT hr;
 	D3D11_MAPPED_SUBRESOURCE matMappedResource;
@@ -203,16 +203,12 @@ bool TextureShaderClass::setShaderParameters(ID3D11DeviceContext* deviceContext,
 	PixelBufferType *pixelColorPtr;
 	unsigned int bufferNumber;
 
-	worldMatrix = XMMatrixTranspose(worldMatrix);
-	viewMatrix = XMMatrixTranspose(viewMatrix);
-	projectionMatrix = XMMatrixTranspose(projectionMatrix);
+	orthoMatrix = XMMatrixTranspose(orthoMatrix);
 	hr = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &matMappedResource);
 	if (FAILED(hr))
 		return false;
 	dataPtr = (MatrixBufferType*)matMappedResource.pData;
-	dataPtr->world = worldMatrix;
-	dataPtr->view = viewMatrix;
-	dataPtr->projection = projectionMatrix;
+	dataPtr->ortho = orthoMatrix;
 	deviceContext->Unmap(m_matrixBuffer, 0);
 	bufferNumber = 0;
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
@@ -229,10 +225,10 @@ bool TextureShaderClass::setShaderParameters(ID3D11DeviceContext* deviceContext,
 	return true;
 }
 
-bool TextureShaderClass::render(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, XMFLOAT4 pixelColor)
+bool FontShaderClass::render(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture, XMMATRIX orthoMatrix, XMFLOAT4 pixelColor)
 {
 	bool result;
-	result = setShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, pixelColor);
+	result = setShaderParameters(deviceContext, orthoMatrix, pixelColor);
 	if (!result)
 	{
 		return false;
@@ -243,7 +239,7 @@ bool TextureShaderClass::render(ID3D11DeviceContext *deviceContext, int indexCou
 	return true;
 }
 
-void TextureShaderClass::renderShader(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture)
+void FontShaderClass::renderShader(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture)
 {
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 	deviceContext->IASetInputLayout(m_inputLayout);

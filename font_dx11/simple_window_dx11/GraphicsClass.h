@@ -1,6 +1,5 @@
 #pragma once
 #include "D3DClass.h"
-#include "CameraClass.h"
 #include "TextClass.h"
 
 const bool FULL_SCREEN = false;
@@ -23,5 +22,5 @@ private:
 private:
 	D3DClass *m_direct3D;
 	TextClass *m_textClass;
-	CameraClass *m_camera;
+	TextClass *m_textClass2;
 };
