@@ -277,7 +277,8 @@ bool SoundClass::playWaveFile()
 		return false;
 	}
 
-	hr = m_secondaryBuffer1->Play(0, 0, DSBPLAY_LOOPING);
+	//hr = m_secondaryBuffer1->Play(0, 0, DSBPLAY_LOOPING);
+	hr = m_secondaryBuffer1->Play(0, 0, 0);
 	if (FAILED(hr))
 	{
 		return false;
