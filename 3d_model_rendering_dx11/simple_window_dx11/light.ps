@@ -18,7 +18,6 @@ struct PixelInputType
 
 float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 {
-	//渲染方程：纹理颜色 * 漫反射颜色 * 光照强度因子
 	float4 textureColor;
 	float3 lightDir;
 	float lightIntensity;

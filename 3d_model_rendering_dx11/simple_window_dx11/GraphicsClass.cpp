@@ -38,7 +38,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	{
 		return false;
 	}
-	result = m_modelClass->init(m_direct3DClass->getDevice(), m_direct3DClass->getDeviceContext(), "../../image_source/stone01.tga");
+	result = m_modelClass->init(m_direct3DClass->getDevice(), m_direct3DClass->getDeviceContext(), L"../../image_source/container2.png", "../../model_source/cube.txt");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
@@ -62,7 +62,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	{
 		return false;
 	}
-	m_lightClass->setDiffuseColor(1.0f, 0.0f, 1.0f, 1.0f);
+	m_lightClass->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightClass->setLightDirection(0.0f, 0.0f, 1.0f);
 
 	return true;
@@ -125,7 +125,7 @@ bool GraphicsClass::render(float rotation)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
-	m_direct3DClass->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	m_direct3DClass->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
 	m_cameraClass->render();
 
 	m_direct3DClass->getWorldMatrix(worldMatrix);
