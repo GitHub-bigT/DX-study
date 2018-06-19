@@ -5,6 +5,7 @@ ModelClass::ModelClass()
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
 	m_textureClass = 0;
+	m_model = 0;
 }
 
 ModelClass::~ModelClass()
