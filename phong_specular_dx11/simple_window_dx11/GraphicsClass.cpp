@@ -64,7 +64,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 	m_lightClass->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightClass->setAmbientColor(0.35f, 0.35f, 0.35f, 1.0f);//35%环境白光
+	m_lightClass->setAmbientColor(0.45f, 0.45f, 0.45f, 1.0f);//45%环境白光
 	m_lightClass->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightClass->setLightDirection(1.0f, 0.0f, 0.0f);
 

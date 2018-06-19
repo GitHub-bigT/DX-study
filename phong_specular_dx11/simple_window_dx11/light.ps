@@ -34,11 +34,11 @@ float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 	//光照强度由光照方向与顶点法线的夹角大小而定
 	//lightIntensity:0~1（类似glsl中clamp, x < 0, x = 0）
 	lightIntensity = saturate(dot(input.normal, lightDir));
-	if(lightIntensity > 0.35f)//避免光照方向与法线呈钝角时，lightIntensity为0，导致环境光没有
+	if(lightIntensity > 0.45f)//避免光照方向与法线呈钝角时，lightIntensity为0，导致环境光没有
 	{
 		color = saturate(diffuseColor * lightIntensity);
 	}
-	color = color * textureColor;
-	//color = color * input.color;
+	//color = color * textureColor;
+	color = color * input.color;
     return color;
 }
