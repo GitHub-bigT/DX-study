@@ -1,0 +1,44 @@
+Texture2D shaderTexture;
+SamplerState SampleType;
+
+cbuffer LightBuffer
+{
+	float4 specularColor;
+	float4 ambientColor;
+	float4 diffuseColor;
+	float3 lightDirection;
+	float padding;
+};
+
+struct PixelInputType
+{
+	float4 position : SV_POSITION;
+	float4 color : COLOR;
+	float2 tex		: TEXCOORD;
+	float3 normal : NORMAL;
+};
+
+float4 TexturePixelShader(PixelInputType input) : SV_TARGET
+{
+	float4 textureColor;
+	float3 lightDir;
+	float lightIntensity;
+	float4 color;
+
+	textureColor = shaderTexture.Sample(SampleType, input.tex);//纹理
+
+	//环境光:不直接指向物体表面上的光叫做环境光
+	color = ambientColor;
+	//定向光:不会照亮它不直接触摸的表面
+	lightDir = -lightDirection;//光照方向取反
+	//光照强度由光照方向与顶点法线的夹角大小而定
+	//lightIntensity:0~1（类似glsl中clamp, x < 0, x = 0）
+	lightIntensity = saturate(dot(input.normal, lightDir));
+	if(lightIntensity > 0.0f)//避免光照方向与法线呈钝角时，lightIntensity为0，导致环境光没有
+	{
+		color = saturate(diffuseColor * lightIntensity);
+	}
+	color = color * textureColor;
+	//color = color * input.color;
+    return color;
+}
