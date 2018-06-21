@@ -3,7 +3,6 @@
 GraphicsClass::GraphicsClass()
 {
 	m_direct3DClass = 0;
-	//m_colorShader = 0;
 	m_modelClass = 0;
 	m_cameraClass = 0;
 	m_textureShaderClass = 0;
@@ -64,9 +63,9 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 	m_lightClass->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightClass->setAmbientColor(0.45f, 0.45f, 0.45f, 1.0f);//45%»·¾³°×¹â
 	m_lightClass->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightClass->setLightDirection(1.0f, 0.0f, 0.0f);
+	m_lightClass->setAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_lightClass->setLightPosition(0.0f, 0.0f, -2.0f);
 
 	return true;
 }
@@ -112,7 +111,7 @@ bool GraphicsClass::frame()
 	bool result;
 	static float rotation = 0.0f;
 
-	rotation += XM_PI * 0.0003f;
+	rotation += XM_PI * 0.0001f;
 	if (rotation > 360.0f)
 		rotation = 0.0f;
 	
@@ -136,13 +135,15 @@ bool GraphicsClass::render(float rotation)
 	m_direct3DClass->getProjectionMatrix(projectionMatrix);
 	//m_direct3D->getOrthoMatrix(projectionMatrix);
 
+	//XMConvertToRadians(0.0f)
 	XMMATRIX rotationMatrix = XMMatrixRotationY(rotation);
 
 	m_modelClass->render(m_direct3DClass->getDeviceContext());
 
 	result = m_textureShaderClass->render(m_direct3DClass->getDeviceContext(), m_modelClass->getIndexCount(), m_modelClass->getTexture(), 
-		rotationMatrix, viewMatrix, projectionMatrix, 
-		m_lightClass->getLightDirection(), m_lightClass->getDiffuseColor(), m_lightClass->getAmbientColor(), m_lightClass->getSpecularColor());
+		rotationMatrix, viewMatrix, projectionMatrix,
+		m_lightClass->getLightPosition(), m_lightClass->getDiffuseColor(), m_lightClass->getAmbientColor(), m_lightClass->getSpecularColor(),
+		m_cameraClass->getPosition());
 	if (!result)
 	{
 		return false;

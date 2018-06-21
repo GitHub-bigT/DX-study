@@ -195,7 +195,7 @@ bool ModelClass::initBuffer(ID3D11Device* device)
 	for (int i = 0; i < m_vertexCount; i++)
 	{
 		vertices[i].position = XMFLOAT3(m_model[i].x, m_model[i].y, m_model[i].z);
-		vertices[i].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+		vertices[i].color = XMFLOAT4(1.0f, 0.5f, 0.31f, 1.0f);
 		vertices[i].tex = XMFLOAT2(m_model[i].u, m_model[i].v);
 		vertices[i].normal = XMFLOAT3(m_model[i].nx, m_model[i].ny, m_model[i].nz);
 		indices[i] = i;

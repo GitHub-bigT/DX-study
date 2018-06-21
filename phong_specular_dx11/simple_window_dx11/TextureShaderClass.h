@@ -18,12 +18,18 @@ private:
 		XMMATRIX projection;
 	};
 
+	struct CameraBufferType
+	{
+		XMFLOAT3 cameraPosition;
+		float padding;
+	};
+
 	struct LightBufferType
 	{
 		XMFLOAT4 specularColor;
 		XMFLOAT4 ambientColor;
 		XMFLOAT4 diffuseColor;
-		XMFLOAT3 lightDirection;
+		XMFLOAT3 lightPosition;
 		float padding;//USAGE为D3D11_BIND_CONSTANT_BUFFER, 则ByteWidth必须为16的倍数 
 	};
 
@@ -32,14 +38,14 @@ public:
 	~TextureShaderClass();
 	bool init(ID3D11Device*, HWND);
 	void stop();
-	bool render(ID3D11DeviceContext*, int, ID3D11ShaderResourceView*, XMMATRIX, XMMATRIX, XMMATRIX, XMFLOAT3, XMFLOAT4, XMFLOAT4, XMFLOAT4);
+	bool render(ID3D11DeviceContext*, int, ID3D11ShaderResourceView*, XMMATRIX, XMMATRIX, XMMATRIX, XMFLOAT3, XMFLOAT4, XMFLOAT4, XMFLOAT4, XMFLOAT3);
 
 private:
 	bool initShader(ID3D11Device*, HWND, WCHAR*, WCHAR*);
 	void stopShader();
 	void renderShader(ID3D11DeviceContext*, int, ID3D11ShaderResourceView*);
 	void outputShaderErrorMsg(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename);
-	bool setShaderParameters(ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, XMFLOAT3, XMFLOAT4, XMFLOAT4, XMFLOAT4);
+	bool setShaderParameters(ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, XMFLOAT3, XMFLOAT4, XMFLOAT4, XMFLOAT4, XMFLOAT3);
 private:
 	ID3D11VertexShader *m_vertexShader;
 	ID3D11PixelShader *m_pixelShader;
@@ -47,4 +53,5 @@ private:
 	ID3D11SamplerState *m_sampleState;
 	ID3D11Buffer *m_matrixBuffer;
 	ID3D11Buffer *m_lightBuffer;
+	ID3D11Buffer *m_cameraBuffer;
 };
