@@ -30,7 +30,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	}
 
 	m_cameraClass = new CameraClass;
-	m_cameraClass->setPosition(0.0f, 0.0f, -10.0f);
+	m_cameraClass->setPosition(0.0f, 0.0f, -7.0f);
 
 	m_modelClass = new ModelClass;
 	if (!m_modelClass)
@@ -38,7 +38,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 	result = m_modelClass->init(m_direct3DClass->getDevice(), m_direct3DClass->getDeviceContext(),
-								L"../../source_image/seafloor.dds", "../../source_model/cube.txt");
+								L"../../source_image/metal/metal_2.jfif", "../../source_model/model_sphere.txt");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
@@ -65,7 +65,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	m_lightClass->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightClass->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightClass->setAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightClass->setLightPosition(0.0f, 0.0f, -2.0f);
+	m_lightClass->setLightPosition(0.8f, 1.3f, -2.0f);
 
 	return true;
 }
@@ -127,7 +127,7 @@ bool GraphicsClass::render(float rotation)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
-	m_direct3DClass->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
+	m_direct3DClass->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 	m_cameraClass->render();
 
 	m_direct3DClass->getWorldMatrix(worldMatrix);

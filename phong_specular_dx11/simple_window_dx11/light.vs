@@ -48,7 +48,8 @@ PixelInputType TextureVertexShader(VertexInputType input)
 
 	//在world空间中计算光照
 	output.calcLightPosition = mul(input.position, worldMatrix).xyz;
-	output.viewDirection = normalize(cameraPosition - output.calcLightPosition);
+	float3 eyePosition = float3(1.0f, 0.5f, -2.0f);
+	output.viewDirection = normalize(eyePosition - output.calcLightPosition);
 
 	return output;
 }

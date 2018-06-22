@@ -34,7 +34,7 @@ float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 	
 	float3 lightDirection;
 
-	//textureColor = shaderTexture.Sample(SampleType, input.tex);//纹理
+	textureColor = shaderTexture.Sample(SampleType, input.tex);//纹理
 	//环境光(平行光):不直接指向物体表面上的光叫做环境光
 	ambiStrength = 0.1f;
 	ambient = ambientColor * ambiStrength;
@@ -46,10 +46,11 @@ float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 
 	//镜面高光（类似于镜子，观察角度不一样，得到的光照亮度也不同，所以依赖于光的位置，法线，观察方向）
 	float3 ref = reflect(-lightDirection, input.normal);//入射光线和法线，所以这里lightDirection需要取反
-	specStrength = pow(saturate(dot(ref, input.viewDirection)), 32);//shininess反光度(一个物体的反光度越高，反射光的能力越强，散射得越少，高光点就会越小//过于大的话可能specStrength的结果很小，导致没有镜面光)
+	specStrength = pow(saturate(dot(ref, input.viewDirection)), 10);//shininess反光度(一个物体的反光度越高，反射光的能力越强，散射得越少，高光点就会越小//过于大的话可能specStrength的结果很小，导致没有镜面光)
 	specular = specularColor * specStrength;
 
-	color = (specular + diffuse + ambient) * input.color;
+	//color = (diffuse + ambient) * input.color + specular;
+	color = (diffuse + ambient) * textureColor + specular;
 
     return color;
 }
