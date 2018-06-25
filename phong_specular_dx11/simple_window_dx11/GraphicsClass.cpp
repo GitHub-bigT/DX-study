@@ -127,7 +127,7 @@ bool GraphicsClass::render(float rotation)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
-	m_direct3DClass->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	m_direct3DClass->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
 	m_cameraClass->render();
 
 	m_direct3DClass->getWorldMatrix(worldMatrix);
@@ -138,15 +138,18 @@ bool GraphicsClass::render(float rotation)
 	//XMConvertToRadians(0.0f)
 	XMMATRIX rotationMatrix = XMMatrixRotationY(rotation);
 
-	m_modelClass->render(m_direct3DClass->getDeviceContext());
-
-	result = m_textureShaderClass->render(m_direct3DClass->getDeviceContext(), m_modelClass->getIndexCount(), m_modelClass->getTexture(), 
-		rotationMatrix, viewMatrix, projectionMatrix,
-		m_lightClass->getLightPosition(), m_lightClass->getDiffuseColor(), m_lightClass->getAmbientColor(), m_lightClass->getSpecularColor(),
-		m_cameraClass->getPosition());
-	if (!result)
+	for (int i = 0; i < m_modelClass->getMeshCount(); i++)
 	{
-		return false;
+		m_modelClass->render(m_direct3DClass->getDeviceContext(), i);
+
+		result = m_textureShaderClass->render(m_direct3DClass->getDeviceContext(), m_modelClass->getIndexCount(i), m_modelClass->getTexture(),
+			rotationMatrix, viewMatrix, projectionMatrix,
+			m_lightClass->getLightPosition(), m_lightClass->getDiffuseColor(), m_lightClass->getAmbientColor(), m_lightClass->getSpecularColor(),
+			m_cameraClass->getPosition());
+		if (!result)
+		{
+			return false;
+		}
 	}
 
 	m_direct3DClass->endScene();

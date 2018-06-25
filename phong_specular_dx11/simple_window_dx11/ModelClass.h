@@ -3,6 +3,8 @@
 #include <DirectXMath.h>
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <array>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -22,40 +24,34 @@ private:
 		XMFLOAT3 normal;
 	};
 
-	struct ModelType
-	{
-		float x, y, z;
-		float u, v;
-		float nx, ny, nz;
-	};
-
 public:
 	ModelClass();
 	~ModelClass();
 
 	bool init(ID3D11Device*, ID3D11DeviceContext*, WCHAR*, char*);
 	void stop();
-	void render(ID3D11DeviceContext*);
-	bool initModel(char*);
-	void releaseModel();
+	void render(ID3D11DeviceContext*, int);
+	bool initModelWidthAssimp(char*);
 
-	int getIndexCount();
 	ID3D11ShaderResourceView* getTexture();
+	int getMeshCount();
+	int getIndexCount(int);
 
 private:
-	bool initBuffer(ID3D11Device*);
-	bool initModelWidthAssimp(char*);
-	void stopBuffer();
-	void renderBuffer(ID3D11DeviceContext*);
+	bool initBuffer(ID3D11Device*, VertexType*, unsigned int*, int, int);
+	void releaseBuffer();
+	void renderBuffer(ID3D11DeviceContext*, int);
 
 	bool loadTexture(ID3D11Device*, ID3D11DeviceContext*, WCHAR*);
 	void releaseTexture();
+	void releaseModel();
 
 private:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-	int m_vertexCount, m_indexCount;
+	int m_meshCount;
 	TextureClass *m_textureClass;
-	ModelType *m_model;
-	unsigned long* indices;
+	ID3D11Device*m_device;
+	vector<int> m_meshIndexCountVector;
 
+	vector<ID3D11Buffer*> m_vertexBufferVector;
+	vector<ID3D11Buffer*> m_indexBufferVector;
 };
