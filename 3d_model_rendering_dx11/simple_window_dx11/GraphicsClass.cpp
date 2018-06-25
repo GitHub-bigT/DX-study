@@ -31,15 +31,18 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	}
 
 	m_cameraClass = new CameraClass;
-	m_cameraClass->setPosition(0.0f, 0.0f, -10.0f);
+	m_cameraClass->setPosition(0.0f, 10.0f, -50.0f);
 
 	m_modelClass = new ModelClass;
 	if (!m_modelClass)
 	{
 		return false;
 	}
+	//../../source_model/cube.obj
+	//../../source_model/Sphere.obj
+	//../../source_model/nanosuit/nanosuit.obj
 	result = m_modelClass->init(m_direct3DClass->getDevice(), m_direct3DClass->getDeviceContext(),
-								L"../../source_image/seafloor.dds", "../../source_model/cube.txt");
+								L"../../source_image/seafloor.dds", "../../source_model/nanosuit/nanosuit.obj");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
@@ -138,14 +141,17 @@ bool GraphicsClass::render(float rotation)
 
 	XMMATRIX rotationMatrix = XMMatrixRotationY(rotation);
 
-	m_modelClass->render(m_direct3DClass->getDeviceContext());
-
-	result = m_textureShaderClass->render(m_direct3DClass->getDeviceContext(), m_modelClass->getIndexCount(), m_modelClass->getTexture(), 
-		rotationMatrix, viewMatrix, projectionMatrix, 
-		m_lightClass->getLightDirection(), m_lightClass->getDiffuseColor(), m_lightClass->getAmbientColor(), m_lightClass->getSpecularColor());
-	if (!result)
+	for (int i = 0; i < m_modelClass->getMeshCount(); i++)
 	{
-		return false;
+		m_modelClass->render(m_direct3DClass->getDeviceContext(), i);
+
+		result = m_textureShaderClass->render(m_direct3DClass->getDeviceContext(), m_modelClass->getIndexCount(i), m_modelClass->getTexture(),
+			rotationMatrix, viewMatrix, projectionMatrix,
+			m_lightClass->getLightDirection(), m_lightClass->getDiffuseColor(), m_lightClass->getAmbientColor(), m_lightClass->getSpecularColor());
+		if (!result)
+		{
+			return false;
+		}
 	}
 
 	m_direct3DClass->endScene();

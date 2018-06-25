@@ -6,6 +6,9 @@ ModelClass::ModelClass()
 	m_indexBuffer = 0;
 	m_textureClass = 0;
 	m_model = 0;
+	m_vertexCount = 0;
+	m_indexCount = 0;
+	indices = 0;
 }
 
 ModelClass::~ModelClass()
@@ -15,7 +18,7 @@ ModelClass::~ModelClass()
 bool ModelClass::init(ID3D11Device* device, ID3D11DeviceContext *deviceContext, WCHAR *textureFilename, char* filename)
 {
 	bool result;
-	result = initModel(filename);
+	result = initModelWidthAssimp(filename);
 	if (!result)
 	{
 		return false;
@@ -31,6 +34,61 @@ bool ModelClass::init(ID3D11Device* device, ID3D11DeviceContext *deviceContext, 
 	{
 		return false;
 	}
+
+	return true;
+}
+
+bool ModelClass::initModelWidthAssimp(char *filename)
+{
+	Assimp::Importer import;
+	const aiScene *scene = import.ReadFile(filename, aiProcess_Triangulate | aiProcess_GenNormals);
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+		return false;
+	}
+
+	for (int i = 0; i < scene->mNumMeshes; i++)
+	{
+		aiMesh *mesh = scene->mMeshes[i];
+		m_vertexCount += mesh->mNumVertices;
+		m_indexCount += mesh->mNumFaces * 3;
+	}
+	m_model = new ModelType[m_vertexCount];
+	indices = new unsigned long[m_indexCount];
+	for (int i = 0; i < scene->mNumMeshes; i++)
+	{
+		aiMesh *mesh = scene->mMeshes[i];
+		if (!mesh->HasNormals() || !mesh->HasTextureCoords(0))
+		{
+			MessageBox(NULL, L"模型文件中没有纹理坐标或者法向信息", L"Error", MB_OK);
+			return false;
+		}
+		int vertexCount = mesh->mNumVertices;
+		for (int j = 0; j < vertexCount; j++)
+		{
+			m_model[j].x = mesh->mVertices[j].x;
+			m_model[j].y = mesh->mVertices[j].y;
+			m_model[j].z = mesh->mVertices[j].z;
+			m_model[j].u = mesh->mTextureCoords[0][j].x;
+			m_model[j].v = mesh->mTextureCoords[0][j].y;
+			m_model[j].nx = mesh->mNormals[j].x;
+			m_model[j].ny = mesh->mNormals[j].y;
+			m_model[j].nz = mesh->mNormals[j].z;
+		}
+
+		int index = 0;
+		for (unsigned int j = 0; j < mesh->mNumFaces; j++)
+		{
+			aiFace face = mesh->mFaces[j];
+			for (unsigned int k = 0; k < face.mNumIndices; k++)
+			{
+				indices[index] = face.mIndices[k];
+				index++;
+			}
+		}
+	}
+	//processNode(scene->mRootNode, scene, true);
 
 	return true;
 }
@@ -136,7 +194,6 @@ int ModelClass::getIndexCount()
 bool ModelClass::initBuffer(ID3D11Device* device)
 {
 	VertexType* vertices;
-	unsigned long* indices;
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
@@ -150,11 +207,12 @@ bool ModelClass::initBuffer(ID3D11Device* device)
 		return false;
 	}
 
+/*
 	indices = new unsigned long[m_indexCount];
 	if (!indices)
 	{
 		return false;
-	}
+	}*/
 
 /*
 	vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  //左下
@@ -198,7 +256,7 @@ bool ModelClass::initBuffer(ID3D11Device* device)
 		vertices[i].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 		vertices[i].tex = XMFLOAT2(m_model[i].u, m_model[i].v);
 		vertices[i].normal = XMFLOAT3(m_model[i].nx, m_model[i].ny, m_model[i].nz);
-		indices[i] = i;
+		//indices[i] = i;
 	}
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;

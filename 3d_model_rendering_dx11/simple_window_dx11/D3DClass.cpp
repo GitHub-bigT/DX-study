@@ -206,7 +206,7 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	//rasterDesc.DepthBiasClamp = 0.0f;
 	//rasterDesc.SlopeScaledDepthBias = 0.0f;
 	//rasterDesc.DepthClipEnable = true;//硬件始终执行光栅化坐标的x和y剪裁。当DepthClipEnable设置为默认值TRUE时，硬件还会剪切 z值
-	//rasterDesc.FrontCounterClockwise = false;//false:顺时针为面向前方
+	//rasterDesc.FrontCounterClockwise = false;//false: 顺时针为面向前方CW:clockwise/CCW:counter clockwise
 	//rasterDesc.ScissorEnable = false;//启用剪刀矩形剔除。活动剪刀矩形外的所有像素都会被删除。
 	hr = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
 	if (FAILED(hr))

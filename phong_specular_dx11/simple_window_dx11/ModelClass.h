@@ -2,6 +2,10 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <fstream>
+#include <iostream>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 #include "TextureClass.h"
 using namespace DirectX;
@@ -40,6 +44,7 @@ public:
 
 private:
 	bool initBuffer(ID3D11Device*);
+	bool initModelWidthAssimp(char*);
 	void stopBuffer();
 	void renderBuffer(ID3D11DeviceContext*);
 
@@ -51,4 +56,6 @@ private:
 	int m_vertexCount, m_indexCount;
 	TextureClass *m_textureClass;
 	ModelType *m_model;
+	unsigned long* indices;
+
 };

@@ -200,7 +200,7 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	ZeroMemory(&rasterDesc, sizeof(rasterDesc));
 	//rasterDesc.AntialiasedLineEnable = false;//指定是否启用行反锯齿; 仅适用于绘制线条和MultisampleEnable为FALSE的情况。
 	//rasterDesc.MultisampleEnable = false;//指定是否在多采样抗锯齿（MSAA）渲染目标上使用四边形或alpha线抗锯齿算法。设置为TRUE以使用四边形线消除锯齿算法，并设置为FALSE以使用alpha线消除锯齿算法
-	rasterDesc.CullMode = D3D11_CULL_NONE;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
 	rasterDesc.FillMode = D3D11_FILL_SOLID;
 	//rasterDesc.DepthBias = 0;//深度偏差:在3D空间中共面的多边形可以通过向每一个添加z偏差（或深度偏差）使其看起来好像不共面。
 	//rasterDesc.DepthBiasClamp = 0.0f;
