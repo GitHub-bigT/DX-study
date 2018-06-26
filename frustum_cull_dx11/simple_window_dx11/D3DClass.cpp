@@ -90,7 +90,7 @@ void D3DClass::printInfo(int screenWidth, int screenHeight)
 	factory = 0;
 }
 
-bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear)
+bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, bool msaa, HWND hwnd, bool fullscreen, float screenDepth, float screenNear)
 {
 	//printInfo(screenWidth, screenHeight);
 
@@ -108,7 +108,17 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	float fieldOfView, screenAspect;
 
 	m_vsync_enabled = vsync;
+	UINT sampleCount = 0;
+	if (msaa)
+		sampleCount = 4;
+	else
+		sampleCount = 1;
 
+	featureLevel = D3D_FEATURE_LEVEL_11_0;
+	hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &m_device, NULL, &m_deviceContext);
+	if (FAILED(hr))
+		return false;
+	
 	//swap chain
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 	swapChainDesc.BufferCount = 1;
@@ -129,8 +139,11 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.OutputWindow = hwnd;
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
+	UINT x4MsaaQuality = 0;
+	m_device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, sampleCount, &x4MsaaQuality);
+	printf("x4MsaaQuality = %d\n", x4MsaaQuality);
+	swapChainDesc.SampleDesc.Count = sampleCount;
+	swapChainDesc.SampleDesc.Quality = x4MsaaQuality - 1;
 	if (fullscreen)
 	{
 		swapChainDesc.Windowed = false;
@@ -141,16 +154,27 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	}
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = 0;//不要设置高级标志。
-	featureLevel = D3D_FEATURE_LEVEL_11_0;
-	hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
+
+	IDXGIDevice *pDxgiDevice(NULL);
+	m_device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&pDxgiDevice));
+	IDXGIAdapter *pDxgiAdapter(NULL);
+	pDxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&pDxgiAdapter));
+	IDXGIFactory *pDxgiFactory(NULL);
+	pDxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&pDxgiFactory));
+	hr = pDxgiFactory->CreateSwapChain(m_device, &swapChainDesc, &m_swapChain);
 	if (FAILED(hr))
 		return false;
+	pDxgiFactory->Release();
+	pDxgiAdapter->Release();
+	pDxgiDevice->Release();
+
+/*
+	hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
+	if (FAILED(hr))
+		return false;*/
 	hr = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferPtr);
 	if (FAILED(hr))
 		return false;
-	UINT x4MsaaQuality = 0;
-	m_device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 1, &x4MsaaQuality);
-	printf("x4MsaaQuality = %d\n", x4MsaaQuality);
 	hr = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
 	if (FAILED(hr))
 		return false;
@@ -164,8 +188,8 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
 	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depthBufferDesc.SampleDesc.Count = 1;
-	depthBufferDesc.SampleDesc.Quality = 0;
+	depthBufferDesc.SampleDesc.Count = sampleCount;
+	depthBufferDesc.SampleDesc.Quality = x4MsaaQuality - 1;
 	depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthBufferDesc.CPUAccessFlags = 0;
@@ -194,7 +218,10 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 	m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	if (msaa)
+		depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+	else
+		depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;//0->depth stencil not read only
 	hr = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
 	if (FAILED(hr))

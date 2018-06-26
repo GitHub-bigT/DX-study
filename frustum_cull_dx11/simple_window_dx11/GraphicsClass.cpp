@@ -24,7 +24,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	{
 		return false;
 	}
-	result = m_direct3D->init(screenWidth, screenHeight, VSYNC_ENABLED, hWnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
+	result = m_direct3D->init(screenWidth, screenHeight, VSYNC_ENABLED, MSAA_ENABLED, hWnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
 	if (!result)
 	{
 		MessageBox(hWnd, L"d3d11 init error", L"Error", MB_OK);

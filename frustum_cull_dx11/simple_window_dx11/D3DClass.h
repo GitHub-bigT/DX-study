@@ -9,7 +9,7 @@ class D3DClass
 public:
 	D3DClass();
 	~D3DClass();
-	bool init(int, int, bool, HWND, bool, float, float);
+	bool init(int, int, bool, bool, HWND, bool, float, float);
 	void stop();
 	void beginScene(float, float, float, float);
 	void endScene();
