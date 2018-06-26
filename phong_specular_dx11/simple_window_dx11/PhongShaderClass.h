@@ -7,7 +7,7 @@
 
 using namespace DirectX;
 
-class TextureShaderClass
+class PhongShaderClass
 {
 
 private:
@@ -34,8 +34,8 @@ private:
 	};
 
 public:
-	TextureShaderClass();
-	~TextureShaderClass();
+	PhongShaderClass();
+	~PhongShaderClass();
 	bool init(ID3D11Device*, HWND);
 	void stop();
 	bool render(ID3D11DeviceContext*, int, ID3D11ShaderResourceView*, XMMATRIX, XMMATRIX, XMMATRIX, XMFLOAT3, XMFLOAT4, XMFLOAT4, XMFLOAT4, XMFLOAT3);

@@ -1,6 +1,6 @@
-#include "TextureShaderClass.h"
+#include "PhongShaderClass.h"
 
-TextureShaderClass::TextureShaderClass()
+PhongShaderClass::PhongShaderClass()
 {
 	m_vertexShader = 0;
 	m_pixelShader = 0;
@@ -11,21 +11,21 @@ TextureShaderClass::TextureShaderClass()
 	m_cameraBuffer = 0;
 }
 
-TextureShaderClass::~TextureShaderClass()
+PhongShaderClass::~PhongShaderClass()
 {
 }
 
-bool TextureShaderClass::init(ID3D11Device *device, HWND hwnd)
+bool PhongShaderClass::init(ID3D11Device *device, HWND hwnd)
 {
-	return initShader(device, hwnd, L"light.vs", L"light.ps");
+	return initShader(device, hwnd, L"phong.vs", L"phong.ps");
 }
 
-void TextureShaderClass::stop()
+void PhongShaderClass::stop()
 {
 	stopShader();
 }
 
-bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFilename, WCHAR *psFilename)
+bool PhongShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFilename, WCHAR *psFilename)
 {
 	HRESULT hr;
 	ID3D10Blob *errorMsg;
@@ -172,7 +172,7 @@ bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFi
 	return true;
 }
 
-void TextureShaderClass::outputShaderErrorMsg(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
+void PhongShaderClass::outputShaderErrorMsg(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
 {
 	char* compileErrors;
 	unsigned long long bufferSize, i;
@@ -185,7 +185,7 @@ void TextureShaderClass::outputShaderErrorMsg(ID3D10Blob* errorMessage, HWND hwn
 	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
 }
 
-void TextureShaderClass::stopShader()
+void PhongShaderClass::stopShader()
 {
 	if (m_sampleState)
 	{
@@ -224,7 +224,7 @@ void TextureShaderClass::stopShader()
 	}
 }
 
-bool TextureShaderClass::setShaderParameters(ID3D11DeviceContext* deviceContext, 
+bool PhongShaderClass::setShaderParameters(ID3D11DeviceContext* deviceContext, 
 	XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, 
 	XMFLOAT3 lightPosition, XMFLOAT4 diffuseColor, XMFLOAT4 ambientColor, XMFLOAT4 specularColor,
 	XMFLOAT3 cameraPosition)
@@ -274,7 +274,7 @@ bool TextureShaderClass::setShaderParameters(ID3D11DeviceContext* deviceContext,
 	return true;
 }
 
-bool TextureShaderClass::render(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture, 
+bool PhongShaderClass::render(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture, 
 	XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, 
 	XMFLOAT3 lightDirection, XMFLOAT4 diffuseColor, XMFLOAT4 ambientColor, XMFLOAT4 specularColor,
 	XMFLOAT3 cameraPosition)
@@ -291,7 +291,7 @@ bool TextureShaderClass::render(ID3D11DeviceContext *deviceContext, int indexCou
 	return true;
 }
 
-void TextureShaderClass::renderShader(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture)
+void PhongShaderClass::renderShader(ID3D11DeviceContext *deviceContext, int indexCount, ID3D11ShaderResourceView *texture)
 {
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 	deviceContext->IASetInputLayout(m_inputLayout);

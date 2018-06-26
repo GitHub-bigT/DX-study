@@ -13,7 +13,7 @@ cbuffer LightBuffer
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
-	float3 calcLightPosition : CALC_POSITION;
+	float3 calcLightPosition : POSITION0;
 	float4 color : COLOR;
 	float2 tex		: TEXCOORD;
 	float3 normal : NORMAL;
@@ -41,6 +41,9 @@ float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 
 	//漫反射光:不会照亮它不直接触摸的表面(依赖于光的位置，法线)
 	lightDirection = normalize(lightPosition - input.calcLightPosition);
+	//为了比较gouraud和phong的区别，所以不用cb中的lightPosition
+	float3 lp = float3(1.0f, 1.3f, -2.0f);
+	lightDirection = normalize(lp - input.calcLightPosition);
 	diffStrength = max(dot(input.normal, lightDirection), 0.0f);
 	diffuse = diffuseColor * diffStrength;
 

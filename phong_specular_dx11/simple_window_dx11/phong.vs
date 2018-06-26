@@ -1,11 +1,11 @@
-cbuffer MatrixBuffer
+cbuffer MatrixBuffer : register( b0 )
 {
     matrix worldMatrix;
     matrix viewMatrix;
     matrix projectionMatrix;
 };
 
-cbuffer CameraBuffer
+cbuffer CameraBuffer : register( b1 )
 {
 	float3 cameraPosition;
 	float padding;
@@ -22,7 +22,7 @@ struct VertexInputType
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
-	float3 calcLightPosition : CALC_POSITION;
+	float3 calcLightPosition : POSITION0;
 	float4 color : COLOR;
 	float2 tex		: TEXCOORD;
 	float3 normal : NORMAL;
@@ -48,7 +48,7 @@ PixelInputType TextureVertexShader(VertexInputType input)
 
 	//在world空间中计算光照
 	output.calcLightPosition = mul(input.position, worldMatrix).xyz;
-	float3 eyePosition = float3(-0.5f, 0.5f, -2.0f);
+	float3 eyePosition = float3(1.0f, 1.3f, -2.0f);
 	output.viewDirection = normalize(eyePosition - output.calcLightPosition);
 
 	return output;

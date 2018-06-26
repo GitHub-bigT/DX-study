@@ -5,7 +5,8 @@ GraphicsClass::GraphicsClass()
 	m_direct3DClass = 0;
 	m_modelClass = 0;
 	m_cameraClass = 0;
-	m_textureShaderClass = 0;
+	m_phongShaderClass = 0;
+	m_gouraudShaderClass = 0;
 	m_lightClass = 0;
 }
 
@@ -30,7 +31,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	}
 
 	m_cameraClass = new CameraClass;
-	m_cameraClass->setPosition(0.0f, 0.0f, -7.0f);
+	m_cameraClass->setPosition(0.0f, 0.0f, -10.0f);
 
 	m_modelClass = new ModelClass;
 	if (!m_modelClass)
@@ -38,19 +39,31 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 	result = m_modelClass->init(m_direct3DClass->getDevice(), m_direct3DClass->getDeviceContext(),
-								L"../../source_image/metal/metal_2.jfif", "../../source_model/Sphere.obj");
+								L"../../source_image/metal/metal_2.jfif", "../../source_model/Sphere_32.obj");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
 		return false;
 	}
 
-	m_textureShaderClass = new TextureShaderClass;
-	if (!m_textureShaderClass)
+	m_phongShaderClass = new PhongShaderClass;
+	if (!m_phongShaderClass)
 	{
 		return false;
 	}
-	result = m_textureShaderClass->init(m_direct3DClass->getDevice(), hWnd);
+	result = m_phongShaderClass->init(m_direct3DClass->getDevice(), hWnd);
+	if (!result)
+	{
+		MessageBox(hWnd, L"shader init error", L"Error", MB_OK);
+		return false;
+	}
+
+	m_gouraudShaderClass = new GouraudShaderClass;
+	if (!m_gouraudShaderClass)
+	{
+		return false;
+	}
+	result = m_gouraudShaderClass->init(m_direct3DClass->getDevice(), hWnd);
 	if (!result)
 	{
 		MessageBox(hWnd, L"shader init error", L"Error", MB_OK);
@@ -65,7 +78,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	m_lightClass->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightClass->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightClass->setAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightClass->setLightPosition(-0.3f, 1.3f, -2.0f);
+	m_lightClass->setLightPosition(-1.0f, 1.3f, -2.0f); //为了比较gouraud和phong的区别，所以不用cb中的lightPosition
 
 	return true;
 }
@@ -92,11 +105,18 @@ void GraphicsClass::stop()
 		m_cameraClass = 0;
 	}
 
-	if (m_textureShaderClass)
+	if (m_phongShaderClass)
 	{
-		m_textureShaderClass->stop();
-		delete m_textureShaderClass;
-		m_textureShaderClass = 0;
+		m_phongShaderClass->stop();
+		delete m_phongShaderClass;
+		m_phongShaderClass = 0;
+	}
+
+	if (m_gouraudShaderClass)
+	{
+		m_gouraudShaderClass->stop();
+		delete m_gouraudShaderClass;
+		m_gouraudShaderClass = 0;
 	}
 
 	if (m_lightClass)
@@ -127,7 +147,7 @@ bool GraphicsClass::render(float rotation)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
-	m_direct3DClass->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
+	m_direct3DClass->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 	m_cameraClass->render();
 
 	m_direct3DClass->getWorldMatrix(worldMatrix);
@@ -137,15 +157,32 @@ bool GraphicsClass::render(float rotation)
 
 	//XMConvertToRadians(0.0f)
 	XMMATRIX rotationMatrix = XMMatrixRotationY(rotation);
+	XMMATRIX translateMatrix_phong = XMMatrixTranslation(1.2f, 0.0f, 0.0f);
 
 	for (int i = 0; i < m_modelClass->getMeshCount(); i++)
 	{
 		m_modelClass->render(m_direct3DClass->getDeviceContext(), i);
 
-		result = m_textureShaderClass->render(m_direct3DClass->getDeviceContext(), m_modelClass->getIndexCount(i), m_modelClass->getTexture(),
-			rotationMatrix, viewMatrix, projectionMatrix,
+		result = m_phongShaderClass->render(m_direct3DClass->getDeviceContext(), m_modelClass->getIndexCount(i), m_modelClass->getTexture(),
+			translateMatrix_phong, viewMatrix, projectionMatrix,
 			m_lightClass->getLightPosition(), m_lightClass->getDiffuseColor(), m_lightClass->getAmbientColor(), m_lightClass->getSpecularColor(),
-			m_cameraClass->getPosition());
+			XMFLOAT3(0.0f, 0.0f, 1.0f));
+		if (!result)
+		{
+			return false;
+		}
+	}
+
+	XMMATRIX translateMatrix_gouraud = XMMatrixTranslation(-1.2f, 0.0f, 0.0f);
+	for (int i = 0; i < m_modelClass->getMeshCount(); i++)
+	{
+		m_modelClass->render(m_direct3DClass->getDeviceContext(), i);
+
+		result = m_gouraudShaderClass->render(m_direct3DClass->getDeviceContext(), m_modelClass->getIndexCount(i), m_modelClass->getTexture(),
+			translateMatrix_gouraud, viewMatrix, projectionMatrix,
+			m_lightClass->getLightPosition(), m_lightClass->getDiffuseColor(), m_lightClass->getAmbientColor(), m_lightClass->getSpecularColor(),
+			XMFLOAT3(0.0f, 1.0f, 0.0f));
+		//m_cameraClass->getPosition()
 		if (!result)
 		{
 			return false;
