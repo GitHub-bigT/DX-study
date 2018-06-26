@@ -106,15 +106,15 @@ bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFi
 	inputLayout[0].SemanticName = "POSITION";
 	inputLayout[0].SemanticIndex = 0;
 	inputLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputLayout[0].InputSlot = 0;//标识输入汇编器的整数值（请参阅输入槽）。有效值介于0和15之间
-	inputLayout[0].AlignedByteOffset = 0;
+	inputLayout[0].InputSlot = 1;//标识输入汇编器的整数值（请参阅输入槽）。有效值介于0和15之间
+	inputLayout[0].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	inputLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	inputLayout[0].InstanceDataStepRate = 0;
 
 	inputLayout[1].SemanticName = "COLOR";
-	inputLayout[1].SemanticIndex = 0;
+	inputLayout[1].SemanticIndex = 5;
 	inputLayout[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputLayout[1].InputSlot = 0;
+	inputLayout[1].InputSlot = 1;
 	inputLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	inputLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	inputLayout[1].InstanceDataStepRate = 0;
@@ -122,7 +122,7 @@ bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFi
 	inputLayout[2].SemanticName = "TEXCOORD";
 	inputLayout[2].SemanticIndex = 0;
 	inputLayout[2].Format = DXGI_FORMAT_R32G32_FLOAT;
-	inputLayout[2].InputSlot = 0;
+	inputLayout[2].InputSlot = 1;
 	inputLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	inputLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	inputLayout[2].InstanceDataStepRate = 0;
@@ -130,7 +130,7 @@ bool TextureShaderClass::initShader(ID3D11Device *device, HWND hwnd, WCHAR *vsFi
 	inputLayout[3].SemanticName = "NORMAL";
 	inputLayout[3].SemanticIndex = 0;
 	inputLayout[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputLayout[3].InputSlot = 0;
+	inputLayout[3].InputSlot = 1;
 	inputLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	inputLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	inputLayout[3].InstanceDataStepRate = 0;

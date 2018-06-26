@@ -210,7 +210,7 @@ void ModelClass::renderBuffer(ID3D11DeviceContext* deviceContext, int meshIndex)
 	offset = 0;
 
 	//input assembler
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBufferVector.at(meshIndex), &stride, &offset);
+	deviceContext->IASetVertexBuffers(1, 1, &m_vertexBufferVector.at(meshIndex), &stride, &offset);
 	deviceContext->IASetIndexBuffer(m_indexBufferVector.at(meshIndex), DXGI_FORMAT_R32_UINT, 0);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

@@ -238,7 +238,7 @@ bool GraphicsClass::renderScene()
 
 bool GraphicsClass::render(int fps, int cpu, float frametime)
 {
-	m_direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	m_direct3D->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
 
 	//start render 2d font
 	
