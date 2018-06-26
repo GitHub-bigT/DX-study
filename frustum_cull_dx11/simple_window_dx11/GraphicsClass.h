@@ -2,6 +2,8 @@
 #include "D3DClass.h"
 #include "TextClass.h"
 #include "ModelClass.h"
+#include "CameraClass.h"
+#include "TextureShaderClass.h"
 
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
@@ -19,6 +21,8 @@ public:
 
 private:
 	bool render(int, int, float);
+	bool renderSystemInfoFont(int, int, float);
+	bool renderScene();
 
 private:
 	D3DClass *m_direct3D;
@@ -26,4 +30,6 @@ private:
 	TextClass *m_cpuTextClass;
 	TextClass *m_frametimeTextClass;
 	ModelClass *m_modelClass;
+	CameraClass *m_cameraClass;
+	TextureShaderClass *m_textureShaderClass;
 };

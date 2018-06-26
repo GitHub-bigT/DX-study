@@ -7,6 +7,8 @@ GraphicsClass::GraphicsClass()
 	m_cpuTextClass = 0;
 	m_frametimeTextClass = 0;
 	m_modelClass = 0;
+	m_cameraClass = 0;
+	m_textureShaderClass = 0;
 }
 
 GraphicsClass::~GraphicsClass()
@@ -65,16 +67,37 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 
+	m_cameraClass = new CameraClass;
+	if (!m_cameraClass)
+	{
+		return false;
+	}
+	m_cameraClass->setPosition(0.0f, 0.0f, -5.0f);
+
 	m_modelClass = new ModelClass;
 	if (!m_modelClass)
 	{
 		return false;
 	}
+	//../../source_model/Sphere_32.obj
+	//../../source_model/cube.obj
 	result = m_modelClass->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), 
-		L"../../source_image/seafloor.dds", "../../source_model/cube.txt");
+		L"../../source_image/seafloor.dds", "../../source_model/cube.obj");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
+		return false;
+	}
+
+	m_textureShaderClass = new TextureShaderClass;
+	if (!m_textureShaderClass)
+	{
+		return false;
+	}
+	result = m_textureShaderClass->init(m_direct3D->getDevice(), hWnd);
+	if (!result)
+	{
+		MessageBox(hWnd, L"textureShaderClass init error", L"Error", MB_OK);
 		return false;
 	}
 
@@ -110,6 +133,19 @@ void GraphicsClass::stop()
 		delete m_frametimeTextClass;
 		m_frametimeTextClass = 0;
 	}
+
+	if (m_textureShaderClass)
+	{
+		m_textureShaderClass->stop();
+		delete m_textureShaderClass;
+		m_textureShaderClass = 0;
+	}
+
+	if (m_cameraClass)
+	{
+		delete m_cameraClass;
+		m_cameraClass = 0;
+	}
 }
 
 bool GraphicsClass::frame(int fps, int cpu, float frametime)
@@ -123,16 +159,14 @@ bool GraphicsClass::frame(int fps, int cpu, float frametime)
 	return true;
 }
 
-bool GraphicsClass::render(int fps, int cpu, float frametime)
+bool GraphicsClass::renderSystemInfoFont(int fps, int cpu, float frametime)
 {
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 	bool result;
-	m_direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 	m_direct3D->getProjectionMatrix(projectionMatrix);
 	m_direct3D->getOrthoMatrix(orthoMatrix);
 
-	////....start render 2d
 	m_direct3D->turnZBufferOff();
 	m_direct3D->turnOnAlphaBlending();
 
@@ -166,9 +200,54 @@ bool GraphicsClass::render(int fps, int cpu, float frametime)
 	if (!result)
 		return false;
 
-	m_direct3D->turnOffAlphaBlending();
+	return true;
+}
+
+bool GraphicsClass::renderScene()
+{
+	bool result;
+	m_cameraClass->render();
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+	m_direct3D->getWorldMatrix(worldMatrix);
+	m_cameraClass->getViewMatrix(viewMatrix);
+	m_direct3D->getProjectionMatrix(projectionMatrix);
+
+	static float rotation = 0.0f;
+
+	rotation += XM_PI * 0.001f;
+	if (rotation > 360.0f)
+		rotation = 0.0f;
+	XMMATRIX rotationMatrix = XMMatrixRotationY(rotation);
+
 	m_direct3D->turnZBufferOn();
+	m_direct3D->turnOffAlphaBlending();
 	//....start render 3d
+	for (int i = 0; i < m_modelClass->getMeshCount(); i++)
+	{
+		m_modelClass->render(m_direct3D->getDeviceContext(), i);
+		result = m_textureShaderClass->render(m_direct3D->getDeviceContext(), m_modelClass->getIndexCount(i),
+			rotationMatrix, viewMatrix, projectionMatrix);
+		if (!result)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool GraphicsClass::render(int fps, int cpu, float frametime)
+{
+	m_direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
+
+	//start render 2d font
+	
+	if (!renderSystemInfoFont(fps, cpu, frametime))
+		return false;
+
+	//start render 3d
+	if (!renderScene())
+		return false;
 
 	m_direct3D->endScene();
 	return true;

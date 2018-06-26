@@ -102,13 +102,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(QTDIR)\include;$(QTDIR)\include\QtCore;../../3rd/stb_image/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(QTDIR)\include;$(QTDIR)\include\QtCore;../../3rd/stb_image/include;../../3rd/assimp/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(QTDIR)\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Qt5Cored.lib;d3d11.lib;dxgi.lib;d3dx11.lib;dinput8.lib;dxguid.lib;dsound.lib;winmm.lib;pdh.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(QTDIR)\lib;../../3rd/assimp/lib/x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt5Cored.lib;d3d11.lib;dxgi.lib;d3dx11.lib;dinput8.lib;dxguid.lib;dsound.lib;winmm.lib;pdh.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreLinkEvent>
       <Command>
@@ -167,6 +167,7 @@
     <ClCompile Include="TextClass.cpp" />
     <ClCompile Include="TextureClass.cpp" />
     <ClCompile Include="FontShaderClass.cpp" />
+    <ClCompile Include="TextureShaderClass.cpp" />
     <ClCompile Include="TimerClass.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -183,11 +184,14 @@
     <ClInclude Include="TextClass.h" />
     <ClInclude Include="TextureClass.h" />
     <ClInclude Include="FontShaderClass.h" />
+    <ClInclude Include="TextureShaderClass.h" />
     <ClInclude Include="TimerClass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="font.ps" />
     <None Include="font.vs" />
+    <None Include="simple.ps" />
+    <None Include="simple.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

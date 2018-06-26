@@ -16,6 +16,12 @@
     <Filter Include="Source Files\shader">
       <UniqueIdentifier>{5b316504-60f8-4758-9df9-6bc7b53ee31e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\render">
+      <UniqueIdentifier>{70194981-5458-4230-99cc-f095c3e6634c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render">
+      <UniqueIdentifier>{23dad11e-b5f4-42b8-80b1-683cefda8e81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,9 +51,6 @@
     <ClCompile Include="TextClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FontShaderClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SoundClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -62,6 +65,12 @@
     </ClCompile>
     <ClCompile Include="ModelClass.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FontShaderClass.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShaderClass.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,9 +98,6 @@
     <ClInclude Include="TextClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FontShaderClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SoundClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -107,12 +113,24 @@
     <ClInclude Include="ModelClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextureShaderClass.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="FontShaderClass.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="font.vs">
       <Filter>Source Files\shader</Filter>
     </None>
     <None Include="font.ps">
+      <Filter>Source Files\shader</Filter>
+    </None>
+    <None Include="simple.vs">
+      <Filter>Source Files\shader</Filter>
+    </None>
+    <None Include="simple.ps">
       <Filter>Source Files\shader</Filter>
     </None>
   </ItemGroup>
