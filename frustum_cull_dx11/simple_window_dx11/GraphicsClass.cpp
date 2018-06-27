@@ -9,6 +9,9 @@ GraphicsClass::GraphicsClass()
 	m_modelClass = 0;
 	m_cameraClass = 0;
 	m_textureShaderClass = 0;
+	m_renderModelListClass = 0;
+	m_renderModelCountTextClass = 0;
+	m_modelCount = 0;
 }
 
 GraphicsClass::~GraphicsClass()
@@ -67,12 +70,23 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 
+	m_renderModelCountTextClass = new TextClass;
+	if (!m_renderModelCountTextClass)
+	{
+		return false;
+	}
+	result = m_renderModelCountTextClass->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), hWnd, screenWidth, screenHeight);
+	if (!result)
+	{
+		return false;
+	}
+
 	m_cameraClass = new CameraClass;
 	if (!m_cameraClass)
 	{
 		return false;
 	}
-	m_cameraClass->setPosition(0.0f, 0.0f, -5.0f);
+	m_cameraClass->setPosition(0.0f, 0.0f, -10.0f);
 
 	m_modelClass = new ModelClass;
 	if (!m_modelClass)
@@ -82,7 +96,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	//../../source_model/Sphere_32.obj
 	//../../source_model/cube.obj
 	result = m_modelClass->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), 
-		L"../../source_image/seafloor.dds", "../../source_model/cube.obj");
+		L"../../source_image/seafloor.dds", "../../source_model/sphere_32.obj");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
@@ -98,6 +112,17 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	if (!result)
 	{
 		MessageBox(hWnd, L"textureShaderClass init error", L"Error", MB_OK);
+		return false;
+	}
+
+	m_renderModelListClass = new ModelListClass;
+	if (!m_renderModelListClass)
+	{
+		return false;
+	}
+	result = m_renderModelListClass->init(25);
+	if (!result)
+	{
 		return false;
 	}
 
@@ -134,6 +159,13 @@ void GraphicsClass::stop()
 		m_frametimeTextClass = 0;
 	}
 
+	if (m_renderModelCountTextClass)
+	{
+		m_renderModelCountTextClass->stop();
+		delete m_renderModelCountTextClass;
+		m_renderModelCountTextClass = 0;
+	}
+
 	if (m_textureShaderClass)
 	{
 		m_textureShaderClass->stop();
@@ -146,11 +178,21 @@ void GraphicsClass::stop()
 		delete m_cameraClass;
 		m_cameraClass = 0;
 	}
+
+	if (m_renderModelListClass)
+	{
+		m_renderModelListClass->stop();
+		delete m_renderModelListClass;
+		m_renderModelListClass = 0;
+	}
 }
 
-bool GraphicsClass::frame(int fps, int cpu, float frametime)
+bool GraphicsClass::frame(int fps, int cpu, float frametime, float rotationY)
 {
 	bool result;
+
+	m_cameraClass->setRotation(0.0f, rotationY, 0.0f);
+
 	result = render(fps, cpu, frametime);
 	if (!result)
 	{
@@ -173,11 +215,13 @@ bool GraphicsClass::renderSystemInfoFont(int fps, int cpu, float frametime)
 	char fpsText[20];
 	char cpuText[20];
 	char frametimeText[30];
+	char modelCountText[30];
 	sprintf(fpsText, "Fps = %d", fps);
 	sprintf(cpuText, "Cpu = %d%%", cpu);
 	if (frametime > 99.998)
 		frametime = 100.0f;
 	sprintf(frametimeText, "FrameTime = %.1f ms", frametime);
+	sprintf(modelCountText, "modelCountText = %d", m_modelCount);
 
 	result = m_fpsTextClass->updateSentence(fpsText, 5, 5, 1.0f, 1.0f, 0.0f, m_direct3D->getDeviceContext());
 	if (!result)
@@ -197,6 +241,13 @@ bool GraphicsClass::renderSystemInfoFont(int fps, int cpu, float frametime)
 	if (!result)
 		return false;
 	result = m_frametimeTextClass->render(m_direct3D->getDeviceContext(), orthoMatrix);
+	if (!result)
+		return false;
+
+	result = m_renderModelCountTextClass->updateSentence(modelCountText, 5, 50, 1.0f, 1.0f, 1.0f, m_direct3D->getDeviceContext());
+	if (!result)
+		return false;
+	result = m_renderModelCountTextClass->render(m_direct3D->getDeviceContext(), orthoMatrix);
 	if (!result)
 		return false;
 
@@ -222,14 +273,25 @@ bool GraphicsClass::renderScene()
 	m_direct3D->turnZBufferOn();
 	m_direct3D->turnOffAlphaBlending();
 	//....start render 3d
-	for (int i = 0; i < m_modelClass->getMeshCount(); i++)
+	m_modelCount = 0;
+	for (int modelIndex = 0; modelIndex < m_renderModelListClass->getModelCount(); modelIndex++)
 	{
-		m_modelClass->render(m_direct3D->getDeviceContext(), i);
-		result = m_textureShaderClass->render(m_direct3D->getDeviceContext(), m_modelClass->getIndexCount(i),
-			rotationMatrix, viewMatrix, projectionMatrix);
-		if (!result)
+		m_modelCount++;
+		float offset_x, offset_y, offset_z;
+		XMFLOAT4 color;
+		m_renderModelListClass->getData(modelIndex, offset_x, offset_y, offset_z, color);
+
+		XMMATRIX translateMatrix = XMMatrixTranslation(offset_x, offset_y, offset_z);
+
+		for (int i = 0; i < m_modelClass->getMeshCount(); i++)
 		{
-			return false;
+			m_modelClass->render(m_direct3D->getDeviceContext(), i);
+			result = m_textureShaderClass->render(m_direct3D->getDeviceContext(), m_modelClass->getIndexCount(i),
+				translateMatrix, viewMatrix, projectionMatrix, color, m_modelClass->getTexture());
+			if (!result)
+			{
+				return false;
+			}
 		}
 	}
 
@@ -238,15 +300,14 @@ bool GraphicsClass::renderScene()
 
 bool GraphicsClass::render(int fps, int cpu, float frametime)
 {
-	m_direct3D->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
-
-	//start render 2d font
-	
-	if (!renderSystemInfoFont(fps, cpu, frametime))
-		return false;
+	m_direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//start render 3d
 	if (!renderScene())
+		return false;
+
+	//start render 2d font
+	if (!renderSystemInfoFont(fps, cpu, frametime))
 		return false;
 
 	m_direct3D->endScene();

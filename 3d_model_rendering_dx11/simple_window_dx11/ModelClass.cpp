@@ -33,7 +33,7 @@ bool ModelClass::init(ID3D11Device* device, ID3D11DeviceContext *deviceContext, 
 bool ModelClass::initModelWidthAssimp(char *filename)
 {
 	Assimp::Importer import;
-	const aiScene *scene = import.ReadFile(filename, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices | aiProcess_MakeLeftHanded);
+	const aiScene *scene = import.ReadFile(filename, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;

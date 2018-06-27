@@ -31,7 +31,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	}
 
 	m_cameraClass = new CameraClass;
-	m_cameraClass->setPosition(0.0f, 10.0f, -50.0f);
+	m_cameraClass->setPosition(0.0f, 0.0f, -5.0f);
 
 	m_modelClass = new ModelClass;
 	if (!m_modelClass)
@@ -42,7 +42,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	//../../source_model/Sphere.obj
 	//../../source_model/nanosuit/nanosuit.obj
 	result = m_modelClass->init(m_direct3DClass->getDevice(), m_direct3DClass->getDeviceContext(),
-								L"../../source_image/seafloor.dds", "../../source_model/nanosuit/nanosuit.obj");
+								L"../../source_image/container2.png", "../../source_model/cube.obj");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);

@@ -33,7 +33,7 @@ bool ModelClass::init(ID3D11Device* device, ID3D11DeviceContext *deviceContext, 
 bool ModelClass::initModelWidthAssimp(char *filename)
 {
 	Assimp::Importer import;
-	const aiScene *scene = import.ReadFile(filename, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices | aiProcess_MakeLeftHanded);
+	const aiScene *scene = import.ReadFile(filename, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
@@ -59,6 +59,11 @@ bool ModelClass::initModelWidthAssimp(char *filename)
 			vertices[j].tex = XMFLOAT2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y);
 			vertices[j].normal = XMFLOAT3(mesh->mNormals[j].x, mesh->mNormals[j].y, mesh->mNormals[j].z);
 		}
+		/*
+		vertices[0].tex = XMFLOAT2(0.0f, 1.0f);
+		vertices[1].tex = XMFLOAT2(1.0f, 1.0f);
+		vertices[2].tex = XMFLOAT2(0.0f, 0.0f);
+		vertices[3].tex = XMFLOAT2(1.0f, 0.0f);*/
 
 		for (unsigned int j = 0; j < mesh->mNumFaces; j++)
 		{
@@ -71,6 +76,42 @@ bool ModelClass::initModelWidthAssimp(char *filename)
 
 		m_meshCount++;
 		m_meshIndexCountVector.push_back(mesh->mNumFaces * 3);
+
+/*
+		VertexType *vertices = new VertexType[4];
+		unsigned int *indices = new unsigned int[6];
+
+		vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);
+		vertices[0].color = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+		vertices[0].tex = XMFLOAT2(0.0f, 1.0f);
+		vertices[0].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+
+		vertices[1].position = XMFLOAT3(-1.0f, 1.0f, 0.0f);
+		vertices[1].color = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+		vertices[1].tex = XMFLOAT2(0.0f, 0.0f);
+		vertices[1].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+
+		vertices[2].position = XMFLOAT3(1.0f, -1.0f, 0.0f);
+		vertices[2].color = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+		vertices[2].tex = XMFLOAT2(1.0f, 1.0f);
+		vertices[2].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+
+		vertices[3].position = XMFLOAT3(1.0f, 1.0f, 0.0f);
+		vertices[3].color = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+		vertices[3].tex = XMFLOAT2(1.0f, 0.0f);
+		vertices[3].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+
+		indices[0] = 0;
+		indices[1] = 1;
+		indices[2] = 2;
+		indices[3] = 1;
+		indices[4] = 3;
+		indices[5] = 2;
+
+		initBuffer(m_device, vertices, indices, 4, 6);
+
+		m_meshCount++;
+		m_meshIndexCountVector.push_back(6);*/
 
 		delete[] vertices;
 		delete[] indices;
@@ -210,7 +251,7 @@ void ModelClass::renderBuffer(ID3D11DeviceContext* deviceContext, int meshIndex)
 	offset = 0;
 
 	//input assembler
-	deviceContext->IASetVertexBuffers(1, 1, &m_vertexBufferVector.at(meshIndex), &stride, &offset);
+	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBufferVector.at(meshIndex), &stride, &offset);
 	deviceContext->IASetIndexBuffer(m_indexBufferVector.at(meshIndex), DXGI_FORMAT_R32_UINT, 0);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

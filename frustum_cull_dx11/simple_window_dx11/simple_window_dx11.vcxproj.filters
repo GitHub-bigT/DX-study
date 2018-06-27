@@ -22,6 +22,12 @@
     <Filter Include="Source Files\render">
       <UniqueIdentifier>{23dad11e-b5f4-42b8-80b1-683cefda8e81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\model">
+      <UniqueIdentifier>{6088c293-99b3-4624-a905-1da40a2651fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\model">
+      <UniqueIdentifier>{0d17a262-54d9-4e07-a9b8-66cb14978c22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,14 +69,20 @@
     <ClCompile Include="TimerClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModelClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FontShaderClass.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="TextureShaderClass.cpp">
       <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelListClass.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelClass.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="PositionClass.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,14 +122,20 @@
     <ClInclude Include="TimerClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextureShaderClass.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="FontShaderClass.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelListClass.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelClass.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionClass.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

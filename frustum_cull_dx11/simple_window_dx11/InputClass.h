@@ -12,6 +12,8 @@ public:
 	void stop();
 	bool frame();
 	bool isEscapePressed();
+	bool isLeftArrowPressed();
+	bool isRightArrowPressed();
 	void getMouseLocation(int&, int&);
 
 private:

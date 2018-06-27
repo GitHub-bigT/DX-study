@@ -106,6 +106,27 @@ bool InputClass::isEscapePressed()
 	return false;
 }
 
+bool InputClass::isLeftArrowPressed()
+{
+	if (m_keyboardState[DIK_LEFT] & 0x80)// & 0x80最高位为 1，则表示相应编码的那个键此时正被按下
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+bool InputClass::isRightArrowPressed()
+{
+	if (m_keyboardState[DIK_RIGHT] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void InputClass::getMouseLocation(int &mouseX, int &mouseY)
 {
 	mouseX = m_mouseX;

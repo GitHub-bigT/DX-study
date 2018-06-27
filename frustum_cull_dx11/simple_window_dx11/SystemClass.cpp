@@ -8,6 +8,7 @@ SystemClass::SystemClass()
 	m_fpsClass = 0;
 	m_cpuClass = 0;
 	m_timerClass = 0;
+	m_positionClass = 0;
 }
 
 SystemClass::~SystemClass()
@@ -75,6 +76,12 @@ bool SystemClass::init()
 		MessageBox(m_hWnd, L"Could not initialize the Timer object.", L"Error", MB_OK);
 	}
 
+	m_positionClass = new PositionClass;
+	if (!m_positionClass)
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -120,6 +127,12 @@ void SystemClass::stop()
 	{
 		delete m_timerClass;
 		m_timerClass = 0;
+	}
+
+	if (m_positionClass)
+	{
+		delete m_positionClass;
+		m_positionClass = 0;
 	}
 
 	// Shutdown the window.
@@ -198,6 +211,8 @@ bool SystemClass::frame()
 	m_fpsClass->frame();
 	bool result;
 	int mouseX, mouseY;
+	bool keydown;
+	float rotationY;
 
 	result = m_input->frame();
 	if (!result)
@@ -205,8 +220,17 @@ bool SystemClass::frame()
 		return false;
 	}
 
+	m_positionClass->setFrameTime(m_timerClass->getFrame());
+	keydown = m_input->isLeftArrowPressed();
+	m_positionClass->turnLeft(keydown);
+
+	keydown = m_input->isRightArrowPressed();
+	m_positionClass->turnRight(keydown);
+
+	m_positionClass->getRotation(rotationY);
+
 	m_input->getMouseLocation(mouseX, mouseY);
-	result = m_graphics->frame(m_fpsClass->getFps(), m_cpuClass->getCpuPercentage(), m_timerClass->getFrame());
+	result = m_graphics->frame(m_fpsClass->getFps(), m_cpuClass->getCpuPercentage(), m_timerClass->getFrame(), rotationY);
 	if (!result)
 	{
 		return false;

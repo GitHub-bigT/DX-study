@@ -3,6 +3,7 @@
 #include "TextClass.h"
 #include "ModelClass.h"
 #include "CameraClass.h"
+#include "ModelListClass.h"
 #include "TextureShaderClass.h"
 
 const bool FULL_SCREEN = false;
@@ -18,7 +19,7 @@ public:
 	~GraphicsClass();
 	bool init(int, int, HWND);
 	void stop();
-	bool frame(int, int, float);
+	bool frame(int, int, float, float);
 
 private:
 	bool render(int, int, float);
@@ -30,7 +31,10 @@ private:
 	TextClass *m_fpsTextClass;
 	TextClass *m_cpuTextClass;
 	TextClass *m_frametimeTextClass;
+	TextClass *m_renderModelCountTextClass;
 	ModelClass *m_modelClass;
 	CameraClass *m_cameraClass;
 	TextureShaderClass *m_textureShaderClass;
+	ModelListClass *m_renderModelListClass;
+	int m_modelCount;
 };
