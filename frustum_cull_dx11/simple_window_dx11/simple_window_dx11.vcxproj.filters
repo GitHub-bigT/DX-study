@@ -28,6 +28,18 @@
     <Filter Include="Source Files\model">
       <UniqueIdentifier>{0d17a262-54d9-4e07-a9b8-66cb14978c22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\font">
+      <UniqueIdentifier>{b50cf6c7-596d-48e9-8abc-6fff01145cbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\font">
+      <UniqueIdentifier>{a58eeb05-4ccb-4976-bca7-83a20f1fc3fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{933d47ce-9358-48ae-bfd6-30a0f8106757}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{44c6db9b-4fb8-480e-9ae7-671cc886fa0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -51,26 +63,8 @@
     <ClCompile Include="TextureClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FontClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SoundClass.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FpsClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CpuClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TimerClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FontShaderClass.cpp">
-      <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="TextureShaderClass.cpp">
       <Filter>Source Files\render</Filter>
@@ -82,6 +76,27 @@
       <Filter>Source Files\model</Filter>
     </ClCompile>
     <ClCompile Include="PositionClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextClass.cpp">
+      <Filter>Source Files\font</Filter>
+    </ClCompile>
+    <ClCompile Include="FontClass.cpp">
+      <Filter>Source Files\font</Filter>
+    </ClCompile>
+    <ClCompile Include="FontShaderClass.cpp">
+      <Filter>Source Files\font</Filter>
+    </ClCompile>
+    <ClCompile Include="CpuClass.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsClass.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerClass.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="FrustumClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,28 +119,10 @@
     <ClInclude Include="TextureClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FontClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SoundClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FpsClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CpuClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimerClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextureShaderClass.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="FontShaderClass.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="ModelListClass.h">
@@ -135,6 +132,27 @@
       <Filter>Header Files\model</Filter>
     </ClInclude>
     <ClInclude Include="PositionClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FontShaderClass.h">
+      <Filter>Header Files\font</Filter>
+    </ClInclude>
+    <ClInclude Include="TextClass.h">
+      <Filter>Header Files\font</Filter>
+    </ClInclude>
+    <ClInclude Include="FontClass.h">
+      <Filter>Header Files\font</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerClass.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsClass.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="CpuClass.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="FrustumClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

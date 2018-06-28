@@ -12,6 +12,7 @@ GraphicsClass::GraphicsClass()
 	m_renderModelListClass = 0;
 	m_renderModelCountTextClass = 0;
 	m_modelCount = 0;
+	m_frustumClass = 0;
 }
 
 GraphicsClass::~GraphicsClass()
@@ -126,6 +127,12 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 
+	m_frustumClass = new FrustumClass;
+	if (!m_frustumClass)
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -184,6 +191,12 @@ void GraphicsClass::stop()
 		m_renderModelListClass->stop();
 		delete m_renderModelListClass;
 		m_renderModelListClass = 0;
+	}
+
+	if (m_frustumClass)
+	{
+		delete m_frustumClass;
+		m_frustumClass = 0;
 	}
 }
 
@@ -262,6 +275,8 @@ bool GraphicsClass::renderScene()
 	m_direct3D->getWorldMatrix(worldMatrix);
 	m_cameraClass->getViewMatrix(viewMatrix);
 	m_direct3D->getProjectionMatrix(projectionMatrix);
+	//构建frustum，准备进行furstum cull
+	m_frustumClass->constructFrustum(SCREEN_DEPTH, projectionMatrix, viewMatrix);
 
 	static float rotation = 0.0f;
 
@@ -276,6 +291,7 @@ bool GraphicsClass::renderScene()
 	m_modelCount = 0;
 	for (int modelIndex = 0; modelIndex < m_renderModelListClass->getModelCount(); modelIndex++)
 	{
+		
 		m_modelCount++;
 		float offset_x, offset_y, offset_z;
 		XMFLOAT4 color;

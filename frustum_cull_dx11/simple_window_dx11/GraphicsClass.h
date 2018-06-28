@@ -5,6 +5,7 @@
 #include "CameraClass.h"
 #include "ModelListClass.h"
 #include "TextureShaderClass.h"
+#include "FrustumClass.h"
 
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
@@ -37,4 +38,5 @@ private:
 	TextureShaderClass *m_textureShaderClass;
 	ModelListClass *m_renderModelListClass;
 	int m_modelCount;
+	FrustumClass *m_frustumClass;
 };

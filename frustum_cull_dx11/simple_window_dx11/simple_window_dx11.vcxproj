@@ -158,6 +158,7 @@
     <ClCompile Include="D3DClass.cpp" />
     <ClCompile Include="FontClass.cpp" />
     <ClCompile Include="FpsClass.cpp" />
+    <ClCompile Include="FrustumClass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="main.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="D3DClass.h" />
     <ClInclude Include="FontClass.h" />
     <ClInclude Include="FpsClass.h" />
+    <ClInclude Include="FrustumClass.h" />
     <ClInclude Include="GraphicsClass.h" />
     <ClInclude Include="InputClass.h" />
     <ClInclude Include="ModelClass.h" />
