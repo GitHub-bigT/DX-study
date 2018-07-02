@@ -16,6 +16,7 @@ void FrustumClass::constructFrustum(float screenDepth, XMMATRIX projectionMatrix
 	//zMinimum = -projectionMatrix.r[3].m128_f32[2] / projectionMatrix.r[2].m128_f32[2];
 	zMinimum = -projectionMatrix._43 / projectionMatrix._33;
 	//printf("zMinimum = %f\n", zMinimum);
+	//D3DXMatrixMultiply()
 	
 }
 

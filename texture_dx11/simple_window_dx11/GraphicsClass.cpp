@@ -6,6 +6,7 @@ GraphicsClass::GraphicsClass()
 	//m_colorShader = 0;
 	m_model = 0;
 	m_camera = 0;
+	m_textureShader = 0;
 }
 
 GraphicsClass::~GraphicsClass()
@@ -36,7 +37,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 	{
 		return false;
 	}
-	result = m_model->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), "../../image_source/stone01.tga");
+	result = m_model->init(m_direct3D->getDevice(), m_direct3D->getDeviceContext(), "../../source_image/stone01.tga");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);

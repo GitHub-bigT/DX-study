@@ -1,6 +1,7 @@
 #pragma once
 #define _XM_NO_INTRINSICS_//must before #include <DirectXMath.h>
 #include <DirectXMath.h>
+#include <D3DX10math.h>
 #include <iostream>
 using namespace DirectX;
 
