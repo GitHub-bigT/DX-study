@@ -39,7 +39,7 @@ bool GraphicsClass::init(int screenWidth, int screenHeight, HWND hWnd)
 		return false;
 	}
 	result = m_modelClass->init(m_direct3DClass->getDevice(), m_direct3DClass->getDeviceContext(),
-								L"../../source_image/metal/metal_2.jfif", "../../source_model/Sphere_32.obj");
+								L"../../source_image/metal/metal_2.jfif", "../../source_model/Sphere_128.obj");
 	if (!result)
 	{
 		MessageBox(hWnd, L"model init error", L"Error", MB_OK);
