@@ -3,6 +3,7 @@
 TextureThread::TextureThread(int gpu, WindowData &wd, QVector<WindowData> &wdVec)
 {
 	m_Graphics = 0;
+	m_TextureClass = 0;
 	m_WindowData = wd;
 	m_WindowVec = wdVec;
 	m_Gpu = gpu;
@@ -28,6 +29,9 @@ void TextureThread::init()
 	}
 	m_Graphics = new GraphicsClass;
 	m_Graphics->init(m_WindowData.width, m_WindowData.height, m_WindowData.hwnd);
+
+	m_TextureClass = new TextureClass;
+	m_TextureClass->init(m_Graphics->getDevice(), m_Graphics->getDeviceContext(), "../../source_image/3840x2160.png");
 }
 
 void TextureThread::stop()
@@ -63,6 +67,13 @@ void TextureThread::releaseResource()
 		m_Graphics->stop();
 		delete m_Graphics;
 		m_Graphics = 0;
+	}
+
+	if (m_TextureClass)
+	{
+		m_TextureClass->stop();
+		delete m_TextureClass;
+		m_TextureClass = 0;
 	}
 }
 
@@ -129,4 +140,9 @@ void TextureThread::setSwapDoneSemaphore(int n)
 void TextureThread::getSwapDoneSemaphore(int n)
 {
 	m_SwapDoneSemaphore.acquire(n);
+}
+
+HANDLE TextureThread::getShareHandle()
+{
+	return m_TextureClass->getShareHandle();
 }

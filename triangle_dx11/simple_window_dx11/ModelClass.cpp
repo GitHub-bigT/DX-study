@@ -58,19 +58,19 @@ bool ModelClass::initBuffer(ID3D11Device* device)
 		return false;
 	}
 
-	vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 10.0f);  //左下
+	vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  //左下
 	vertices[0].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 
-	vertices[1].position = XMFLOAT3(-1.0f, 1.0f, 10.0f);  //左上
+	vertices[1].position = XMFLOAT3(-1.0f, 1.0f, 0.0f);  //左上
 	vertices[1].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 
-	vertices[2].position = XMFLOAT3(1.0f, 1.0f, 10.0f);  //右上
+	vertices[2].position = XMFLOAT3(1.0f, 1.0f, 0.0f);  //右上
 	vertices[2].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 
-	vertices[3].position = XMFLOAT3(1.0f, -1.0f, 10.0f);  //右下
+	vertices[3].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  //右下
 	vertices[3].color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 
-	vertices[4].position = XMFLOAT3(0.0f, 1.0f, 10.0f);  //中上
+	vertices[4].position = XMFLOAT3(0.0f, 1.0f, 0.0f);  //中上
 	vertices[4].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 
 /*

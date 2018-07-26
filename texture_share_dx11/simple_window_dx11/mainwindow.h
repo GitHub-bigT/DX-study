@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVector>
 #include "TextureThread.h"
+#include "ui_mainwindow.h"
 
 namespace Ui {
 class MainWindow;

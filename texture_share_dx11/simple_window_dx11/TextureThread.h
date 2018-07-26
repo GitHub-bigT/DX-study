@@ -3,6 +3,7 @@
 #include <QVector>
 #include <QSemaphore>
 #include "RenderThread.h"
+#include "TextureClass.h"
 
 class TextureThread : public QThread
 {
@@ -23,6 +24,8 @@ public:
 	void setSwapDoneSemaphore(int n = 1);
 	void getSwapDoneSemaphore(int n = 1);
 
+	HANDLE getShareHandle();
+
 private:
 	void init();
 	void stopRenderThread();
@@ -39,4 +42,5 @@ private:
 	QSemaphore m_TextureSemaphore, m_TextureDoneSemaphore;
 	QSemaphore m_SwapSemaphore, m_SwapDoneSemaphore;
 	GraphicsClass *m_Graphics;
+	TextureClass *m_TextureClass;
 };

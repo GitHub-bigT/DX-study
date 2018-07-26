@@ -4,6 +4,7 @@
 #include <QThread>
 
 #include "GraphicsClass.h"
+#include "TextureClass.h"
 
 struct WindowData
 {
@@ -39,4 +40,6 @@ private:
 	WindowData m_WindowData;
 	GraphicsClass *m_Graphics;
 	TextureThread *m_TextureThread;
+	HANDLE m_ShareHandle;
+	ID3D11ShaderResourceView *m_TextureView;
 };

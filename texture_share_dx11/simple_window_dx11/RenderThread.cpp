@@ -4,6 +4,8 @@
 RenderThread::RenderThread(TextureThread *t, WindowData &wd)
 {
 	m_Graphics = 0;
+	m_TextureView = 0;
+	m_ShareHandle = 0;
 	m_TextureThread = t;
 	m_WindowData = wd;
 	printf("window number = %d\n", m_WindowData.number);
@@ -44,6 +46,7 @@ void RenderThread::releaseResource()
 	}
 }
 
+
 void RenderThread::run()
 {
 	init();
@@ -57,7 +60,20 @@ void RenderThread::run()
 			break;
 		}
 
-		m_Graphics->render();
+		HRESULT hr;
+
+		ID3D11Texture2D *m_texture = NULL;
+		m_ShareHandle = m_TextureThread->getShareHandle();
+		m_Graphics->getDevice()->OpenSharedResource(m_ShareHandle, __uuidof(ID3D11Texture2D), (void**)&m_texture);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		srvDesc.Texture2D.MipLevels = 1;
+		hr = m_Graphics->getDevice()->CreateShaderResourceView(m_texture, &srvDesc, &m_TextureView);
+
+		m_Graphics->render(m_TextureView);
 
 		m_TextureThread->setTextureDoneSemaphore();
 

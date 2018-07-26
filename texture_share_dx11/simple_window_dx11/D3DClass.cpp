@@ -212,8 +212,8 @@ bool D3DClass::init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bo
 
 	//view port
 	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
-	viewport.Width = screenWidth;
-	viewport.Height = screenHeight;
+	viewport.Width = screenWidth / 2;
+	viewport.Height = screenHeight / 2;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0.0f;
